@@ -1,0 +1,85 @@
+================================================================================
+                    COPY & PASTE THESE COMMANDS IN ORDER
+================================================================================
+
+IMPORTANT: 
+  - Press Ctrl+C to stop backend first
+  - Copy entire line (including "cd C:\Users\Hena\Desktop\portfolio\backend;")
+  - Right-click in PowerShell to paste
+  - Press Enter after each command
+
+================================================================================
+COMMAND 1: RUN MIGRATIONS
+================================================================================
+
+Copy this entire line:
+
+cd C:\Users\Hena\Desktop\portfolio\backend; npm run db:migrate
+
+Expected output:
+  Running migrations...
+  Migrations completed successfully
+
+================================================================================
+COMMAND 2: ADD SAMPLE DATA
+================================================================================
+
+Copy this entire line:
+
+psql -U postgres -d portfolio_db -c "INSERT INTO projects (title, description, technologies, link, github, featured) VALUES ('E-Commerce Platform', 'Full-stack e-commerce solution', 'React, Node.js, PostgreSQL, Stripe', 'https://ecommerce-demo.com', 'https://github.com/username/ecommerce', true), ('Task Management App', 'Collaborative task management tool', 'React, Firebase, TypeScript', 'https://taskapp-demo.com', 'https://github.com/username/taskapp', true), ('Analytics Dashboard', 'Real-time analytics dashboard', 'Next.js, Chart.js, PostgreSQL', 'https://analytics-demo.com', 'https://github.com/username/analytics', true);"
+
+Expected output:
+  INSERT 0 3
+
+================================================================================
+COMMAND 3: VERIFY DATA
+================================================================================
+
+Copy this entire line:
+
+psql -U postgres -d portfolio_db -c "SELECT COUNT(*) FROM projects;"
+
+Expected output:
+  count
+  -------
+       3
+
+================================================================================
+COMMAND 4: START BACKEND
+================================================================================
+
+Copy this entire line:
+
+cd C:\Users\Hena\Desktop\portfolio\backend; npm run dev
+
+Expected output:
+  Server running on http://localhost:5000
+
+================================================================================
+COMMAND 5: OPEN BROWSER
+================================================================================
+
+Open your browser and go to:
+
+http://localhost:5173
+
+Click "Projects" - should show 3 projects
+
+================================================================================
+                              ALL DONE! ✅
+================================================================================
+
+Your portfolio is now fully working!
+
+If you get any errors, check:
+  1. Did you press Ctrl+C to stop backend first?
+  2. Did you copy the ENTIRE command?
+  3. Did you right-click to paste (not Ctrl+V)?
+  4. Did you press Enter after each command?
+
+If still having issues, check the error message and refer to:
+  - IMMEDIATE_FIX.md
+  - FIX_DATABASE.md
+  - WINDOWS_POWERSHELL_GUIDE.md
+
+================================================================================

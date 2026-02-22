@@ -1,0 +1,112 @@
+================================================================================
+                    STEP BY STEP - FIX DATABASE ERROR
+================================================================================
+
+ERROR YOU'RE SEEING:
+  "Error fetching projects: error: relation "projects" does not exist"
+
+WHY:
+  Database tables weren't created
+
+================================================================================
+                              STEP 1 OF 5
+================================================================================
+
+STOP THE BACKEND
+
+In your backend terminal (where it says "Server running on http://localhost:5000"):
+  Press: Ctrl+C
+
+Wait for it to stop.
+
+================================================================================
+                              STEP 2 OF 5
+================================================================================
+
+RUN MIGRATIONS
+
+In PowerShell, copy and paste this ENTIRE line:
+
+  cd C:\Users\Hena\Desktop\portfolio\backend; npm run db:migrate
+
+Press Enter and wait for:
+  "Running migrations..."
+  "Migrations completed successfully"
+
+================================================================================
+                              STEP 3 OF 5
+================================================================================
+
+ADD SAMPLE DATA
+
+In PowerShell, copy and paste this ENTIRE line:
+
+  psql -U postgres -d portfolio_db -c "INSERT INTO projects (title, description, technologies, link, github, featured) VALUES ('E-Commerce Platform', 'Full-stack e-commerce solution', 'React, Node.js, PostgreSQL, Stripe', 'https://ecommerce-demo.com', 'https://github.com/username/ecommerce', true), ('Task Management App', 'Collaborative task management tool', 'React, Firebase, TypeScript', 'https://taskapp-demo.com', 'https://github.com/username/taskapp', true), ('Analytics Dashboard', 'Real-time analytics dashboard', 'Next.js, Chart.js, PostgreSQL', 'https://analytics-demo.com', 'https://github.com/username/analytics', true);"
+
+Press Enter. If no error, it worked!
+
+================================================================================
+                              STEP 4 OF 5
+================================================================================
+
+VERIFY DATA WAS ADDED
+
+In PowerShell, copy and paste:
+
+  psql -U postgres -d portfolio_db -c "SELECT COUNT(*) FROM projects;"
+
+Press Enter.
+
+You should see:
+  count
+  -------
+       3
+
+If you see 3, continue to Step 5.
+
+================================================================================
+                              STEP 5 OF 5
+================================================================================
+
+START BACKEND AGAIN
+
+In PowerShell, copy and paste:
+
+  cd C:\Users\Hena\Desktop\portfolio\backend; npm run dev
+
+Press Enter.
+
+You should see:
+  Server running on http://localhost:5000
+
+NO MORE ERRORS!
+
+================================================================================
+                            VERIFY IT WORKS
+================================================================================
+
+1. Open browser: http://localhost:5173
+
+2. Click "Projects" in navbar
+
+3. Should show 3 projects from database
+
+4. Press F12 to open console
+
+5. Should have NO red errors
+
+================================================================================
+                              SUCCESS! 🎉
+================================================================================
+
+Your portfolio is now fully working with:
+  ✅ Database connected
+  ✅ Tables created
+  ✅ Sample data loaded
+  ✅ Backend running
+  ✅ Frontend running
+  ✅ No errors
+
+Enjoy your portfolio!
+
+================================================================================

@@ -1,0 +1,135 @@
+/* Global hover effects for all pages */
+
+/* Blue hover effect for interactive elements */
+.card-hover {
+  transition: all 0.3s ease;
+}
+
+.card-hover:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 30px rgba(59, 130, 246, 0.2);
+}
+
+.card-hover:focus-within {
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2), 0 10px 30px rgba(59, 130, 246, 0.15);
+}
+
+/* Link hover effects */
+a {
+  transition: color 0.3s ease;
+  position: relative;
+}
+
+a:hover {
+  color: #3b82f6;
+}
+
+a:focus-visible {
+  outline: 2px dashed #3b82f6;
+  outline-offset: 4px;
+}
+
+/* Button hover effects */
+button {
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+button:hover {
+  transform: translateY(-2px);
+}
+
+button:focus-visible {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.2);
+}
+
+/* Input focus effects */
+input:focus,
+textarea:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+  transition: all 0.3s ease;
+}
+
+input:focus-visible,
+textarea:focus-visible {
+  outline: 2px solid #3b82f6;
+  outline-offset: 0;
+  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.15);
+}
+
+/* Badge hover effects */
+.badge {
+  transition: all 0.3s ease;
+}
+
+.badge:hover {
+  background-color: #3b82f6;
+  color: white;
+  transform: scale(1.05);
+}
+
+.badge:focus-visible {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+}
+
+/* Section hover effects */
+.section-hover {
+  transition: all 0.3s ease;
+}
+
+.section-hover:hover {
+  transform: translateY(-2px);
+}
+
+.section-hover:focus-within {
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+}
+
+/* Smooth transitions for all elements */
+* {
+  transition: color 0.3s ease, background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.no-transition {
+  transition: none;
+}
+
+/* Focus ring for accessibility */
+:focus-visible {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+}
+
+/* Dark mode focus styles */
+.dark input:focus,
+.dark textarea:focus {
+  border-color: #0ea5e9;
+  box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.1);
+}
+
+.dark input:focus-visible,
+.dark textarea:focus-visible {
+  outline-color: #0ea5e9;
+  box-shadow: 0 0 0 4px rgba(14, 165, 233, 0.15);
+}
+
+.dark :focus-visible {
+  outline-color: #0ea5e9;
+}
+
+/* Hover state for cards */
+.card-hover:hover,
+.card-hover:focus-within {
+  box-shadow: 0 10px 30px rgba(59, 130, 246, 0.2);
+}
+
+.dark .card-hover:hover,
+.dark .card-hover:focus-within {
+  box-shadow: 0 10px 30px rgba(14, 165, 233, 0.2);
+}
+
