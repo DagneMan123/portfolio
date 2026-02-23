@@ -2,38 +2,15 @@ import { Link } from 'react-router-dom'
 import { useState, useEffect } from 'react'
 
 export default function Hero() {
-  const [rotateX, setRotateX] = useState(0)
-  const [rotateY, setRotateY] = useState(0)
-  const [scrollRotateZ, setScrollRotateZ] = useState(0)
+  const [rotation, setRotation] = useState(0)
 
   useEffect(() => {
-    const handleScroll = () => {
-      setScrollRotateZ((window.scrollY * 0.5) % 360)
-    }
+    const interval = setInterval(() => {
+      setRotation(prev => (prev + 90) % 360)
+    }, 4000)
 
-    window.addEventListener('scroll', handleScroll)
-    return () => window.removeEventListener('scroll', handleScroll)
+    return () => clearInterval(interval)
   }, [])
-
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    const rect = e.currentTarget.getBoundingClientRect()
-    const x = e.clientX - rect.left
-    const y = e.clientY - rect.top
-    
-    const centerX = rect.width / 2
-    const centerY = rect.height / 2
-    
-    const rotX = ((y - centerY) / centerY) * 15
-    const rotY = ((centerX - x) / centerX) * 15
-    
-    setRotateX(rotX)
-    setRotateY(rotY)
-  }
-
-  const handleMouseLeave = () => {
-    setRotateX(0)
-    setRotateY(0)
-  }
 
   return (
     <section className="min-h-screen flex items-center justify-center bg-gradient-to-b from-light-bg to-light-surface dark:from-dark-bg dark:to-dark-surface pt-20 overflow-hidden">
@@ -312,61 +289,78 @@ export default function Hero() {
           position: relative;
           transition: all 0.3s ease;
           perspective: 1200px;
+          width: 320px;
+          height: 320px;
+        }
+
+        .cubic-carousel {
+          position: relative;
+          width: 100%;
+          height: 100%;
+          transform-style: preserve-3d;
+          transition: transform 0.8s ease-out;
+        }
+
+        .cubic-face {
+          position: absolute;
+          width: 100%;
+          height: 100%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          border-radius: 1rem;
+          overflow: hidden;
+          backface-visibility: hidden;
+          border: 2px solid rgba(59, 130, 246, 0.3);
+          box-shadow: 0 10px 30px rgba(37, 99, 235, 0.2);
+        }
+
+        .cubic-face img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          transition: transform 0.5s ease;
+        }
+
+        .cubic-face:hover img {
+          transform: scale(1.1);
+          filter: brightness(1.15);
+        }
+
+        .cubic-face:nth-child(1) {
+          transform: rotateY(0deg) translateZ(160px);
+        }
+
+        .cubic-face:nth-child(2) {
+          transform: rotateY(90deg) translateZ(160px);
+        }
+
+        .cubic-face:nth-child(3) {
+          transform: rotateY(180deg) translateZ(160px);
+        }
+
+        .cubic-face:nth-child(4) {
+          transform: rotateY(270deg) translateZ(160px);
+        }
+
+        .cubic-carousel.rotate-90 {
+          transform: rotateY(-90deg);
+        }
+
+        .cubic-carousel.rotate-180 {
+          transform: rotateY(-180deg);
+        }
+
+        .cubic-carousel.rotate-270 {
+          transform: rotateY(-270deg);
+        }
+
+        .cubic-carousel.rotate-360 {
+          transform: rotateY(-360deg);
         }
 
         .hero-image-container:hover {
           animation: imageBorder 2s ease-in-out infinite;
-        }
-
-        .hero-image-wrapper {
-          position: relative;
-          overflow: hidden;
-          border-radius: 1rem;
-          transform-style: preserve-3d;
-          transition: transform 0.1s ease-out;
-          width: 100%;
-          height: 100%;
-        }
-
-        .hero-image-wrapper img {
-          width: 100%;
-          height: 100%;
-          object-fit: cover;
-          transform-style: preserve-3d;
-          transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .hero-image-wrapper::before {
-          content: '';
-          position: absolute;
-          inset: 0;
-          background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(139, 92, 246, 0.1));
-          z-index: 10;
-          pointer-events: none;
-          opacity: 0;
-          transition: opacity 0.3s ease;
-          transform-style: preserve-3d;
-        }
-
-        .hero-image-container:hover .hero-image-wrapper::before {
-          opacity: 1;
-        }
-
-        .hero-image-container:hover .hero-image-wrapper img {
-          filter: brightness(1.1) contrast(1.05);
-        }
-
-        @keyframes float3d {
-          0%, 100% {
-            transform: translateZ(0px);
-          }
-          50% {
-            transform: translateZ(20px);
-          }
-        }
-
-        .hero-image-container:hover .hero-image-wrapper img {
-          animation: float3d 2s ease-in-out infinite;
         }
       `}</style>
 
@@ -455,22 +449,26 @@ export default function Hero() {
           </div>
 
           <div className="hero-image hidden lg:flex justify-center">
-            <div className="relative w-80 h-80 group hero-image-container" onMouseMove={handleMouseMove} onMouseLeave={handleMouseLeave}>
+            <div className="relative w-80 h-80 group hero-image-container">
               <div className="absolute inset-0 bg-gradient-to-br from-primary to-accent rounded-2xl blur-3xl opacity-10 dark:opacity-20 image-glow group-hover:opacity-30 transition-opacity duration-300"></div>
-              <div className="relative bg-gradient-to-br from-primary/10 to-accent/10 dark:from-primary/20 dark:to-accent/20 rounded-2xl border border-primary/30 dark:border-accent/30 h-full flex items-center justify-center image-float overflow-hidden shadow-lg group-hover:shadow-2xl group-hover:shadow-primary/50 transition-all duration-300">
-                <div 
-                  className="hero-image-wrapper absolute inset-0"
-                  style={{
-                    transform: `rotateX(${rotateX}deg) rotateY(${rotateY}deg) rotateZ(${scrollRotateZ}deg)`,
-                  }}
-                >
-                  <img 
-                    src="/src/assets/dagne.jpg" 
-                    alt="Dagne Developer" 
-                    className="w-full h-full object-cover rounded-2xl"
-                  />
+              <div 
+                className="cubic-carousel"
+                style={{
+                  transform: `rotateY(${rotation}deg)`
+                }}
+              >
+                <div className="cubic-face bg-gradient-to-br from-primary/10 to-accent/10">
+                  <img src="/src/assets/dagne.jpg" alt="Portfolio 1" />
                 </div>
-                <div className="absolute inset-0 bg-gradient-to-t from-primary/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-2xl"></div>
+                <div className="cubic-face bg-gradient-to-br from-primary/10 to-accent/10">
+                  <img src="/src/assets/mom.jpg" alt="Portfolio 2" />
+                </div>
+                <div className="cubic-face bg-gradient-to-br from-primary/10 to-accent/10">
+                  <img src="/src/assets/enate.jpg" alt="Portfolio 3" />
+                </div>
+                <div className="cubic-face bg-gradient-to-br from-primary/10 to-accent/10">
+                  <img src="/src/assets/hena.jpg" alt="Portfolio 4" />
+                </div>
               </div>
             </div>
           </div>
