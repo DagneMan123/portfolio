@@ -16,6 +16,7 @@ export default function Navbar() {
     { path: '/projects', label: 'Projects' },
     { path: '/testimonials', label: 'Testimonials' },
     { path: '/experience', label: 'Experience' },
+    { path: '/services', label: 'Services' },
     { path: '/contact', label: 'Contact' },
   ]
 

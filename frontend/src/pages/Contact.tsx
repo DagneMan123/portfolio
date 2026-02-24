@@ -61,10 +61,7 @@ END:VCARD`
     // Only allow digits (0-9) and + sign - remove everything else including letters
     const filteredValue = value.replace(/[^0-9+]/g, '')
     
-    // Restrict to maximum 13 characters (including + sign)
-    const restrictedValue = filteredValue.slice(0, 13)
-    
-    setFormData(prev => ({ ...prev, phone: restrictedValue }))
+    setFormData(prev => ({ ...prev, phone: filteredValue }))
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -73,12 +70,11 @@ END:VCARD`
     setError('')
     setSuccess(false)
 
-    // Validate phone number - only Ethiopian formats
-    // +251XXXXXXXXX (exactly 12 digits with +)
-    // 09XXXXXXXX (exactly 10 digits)
-    const phoneRegex = /^(\+251\d{9}|09\d{8})$/
+    // Validate phone number - accept any phone number with at least 10 digits
+    // Must contain only numbers and + sign
+    const phoneRegex = /^(\+)?[0-9]{10,}$/
     if (!phoneRegex.test(formData.phone)) {
-      setError('Phone number must be Ethiopian format: +251964855740 or 0964855740')
+      setError('Phone number must contain at least 10 digits')
       setLoading(false)
       return
     }
@@ -288,15 +284,11 @@ END:VCARD`
                   name="phone"
                   value={formData.phone}
                   onChange={handlePhoneChange}
-                  maxLength={13}
                   className="input-field dark:text-white"
-                  placeholder=""
+                  placeholder="+251964855740"
                   inputMode="numeric"
-                  title="Phone number - maximum 13 characters"
+                  title="Phone number - numbers and + sign only"
                 />
-                <p className="text-xs text-light-muted mt-2">
-                  {formData.phone.length}/13 characters
-                </p>
               </div>
 
               <div>

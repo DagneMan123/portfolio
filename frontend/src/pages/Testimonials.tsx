@@ -75,6 +75,14 @@ export default function TestimonialsPage() {
     setAutoPlay(false)
   }
 
+  const getVisibleImages = () => {
+    const images = []
+    for (let i = 0; i < 3; i++) {
+      images.push(testimonials[(currentIndex + i) % testimonials.length])
+    }
+    return images
+  }
+
   return (
     <div className="min-h-screen bg-light-bg dark:bg-dark-bg">
       <style>{`
@@ -215,11 +223,213 @@ export default function TestimonialsPage() {
           background: rgba(37, 99, 235, 0.6);
         }
 
-        .slide-counter {
+        .carousel-wrapper {
+          position: relative;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 1.5rem;
+          margin-bottom: 3rem;
+        }
+
+        .image-carousel-container {
+          display: grid;
+          grid-template-columns: repeat(3, 1fr);
+          gap: 3rem;
+          width: 100%;
+          max-width: 900px;
+        }
+
+        .carousel-image-wrapper {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 0;
+          background: linear-gradient(135deg, rgba(59, 130, 246, 0.05), rgba(139, 92, 246, 0.05));
+          border: 1px solid rgba(59, 130, 246, 0.1);
+          border-radius: 1rem;
+          padding: 2.5rem 1.5rem;
           text-align: center;
-          margin-top: 1rem;
+          transition: all 0.4s ease;
+          box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        }
+
+        .carousel-image-wrapper:hover {
+          transform: translateY(-5px);
+          box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+          border-color: rgba(59, 130, 246, 0.3);
+        }
+
+        .carousel-image-card {
+          position: relative;
+          overflow: hidden;
+          border-radius: 50%;
+          width: 130px;
+          height: 130px;
+          cursor: pointer;
+          transition: all 0.4s ease;
+          border: none;
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+          margin-bottom: 1.5rem;
+        }
+
+        .carousel-image-card:hover {
+          transform: scale(1.05);
+          box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .carousel-image-card img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          transition: transform 0.5s ease;
+        }
+
+        .carousel-image-card:hover img {
+          transform: scale(1.08);
+        }
+
+        .carousel-image-overlay {
+          position: absolute;
+          inset: 0;
+          background: transparent;
+          opacity: 0;
+          transition: opacity 0.3s ease;
+          border-radius: 50%;
+        }
+
+        .carousel-description {
+          font-size: 1rem;
+          color: rgba(37, 99, 235, 0.9);
+          font-weight: 700;
+          margin-bottom: 0.75rem;
+          min-height: 1.5rem;
+        }
+
+        .carousel-quote {
+          font-size: 0.85rem;
           color: rgba(37, 99, 235, 0.7);
-          font-size: 0.875rem;
+          font-style: italic;
+          line-height: 1.5;
+          margin-top: 0;
+        }
+
+        .carousel-nav-button {
+          position: absolute;
+          top: 50%;
+          transform: translateY(-50%);
+          background: transparent;
+          color: rgba(37, 99, 235, 0.7);
+          border: none;
+          width: 50px;
+          height: 50px;
+          border-radius: 50%;
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          transition: all 0.3s ease;
+          z-index: 20;
+          font-size: 2.5rem;
+          font-weight: 300;
+          line-height: 1;
+        }
+
+        .carousel-nav-button:hover {
+          transform: translateY(-50%) scale(1.2);
+        }
+
+        .carousel-nav-button.prev {
+          left: -70px;
+        }
+
+        .carousel-nav-button.next {
+          right: -70px;
+        }
+
+        .carousel-dots {
+          display: flex;
+          justify-content: center;
+          gap: 0.75rem;
+          margin-bottom: 2rem;
+        }
+
+        .dot {
+          width: 12px;
+          height: 12px;
+          border-radius: 50%;
+          background: #ddd;
+          cursor: pointer;
+          transition: all 0.3s ease;
+          border: none;
+        }
+
+        .dot.active {
+          background: #ff9500;
+          transform: scale(1.2);
+        }
+
+        .dot:hover {
+          background: #ffb84d;
+        }
+
+        .scroll-icon {
+          text-align: center;
+          margin-top: 3rem;
+          animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+          0%, 100% {
+            transform: translateY(0);
+            opacity: 0.7;
+          }
+          50% {
+            transform: translateY(-10px);
+            opacity: 1;
+          }
+        }
+
+        .scroll-icon svg {
+          width: 32px;
+          height: 32px;
+          color: rgba(37, 99, 235, 0.6);
+          margin: 0 auto;
+        }
+
+        @media (max-width: 1024px) {
+          .carousel-nav-button.prev {
+            left: -50px;
+          }
+
+          .carousel-nav-button.next {
+            right: -50px;
+          }
+        }
+
+        @media (max-width: 768px) {
+          .image-carousel-container {
+            grid-template-columns: 1fr;
+            gap: 2rem;
+          }
+
+          .carousel-image-card {
+            width: 120px;
+            height: 120px;
+          }
+
+          .carousel-nav-button.prev {
+            left: 5px;
+          }
+
+          .carousel-nav-button.next {
+            right: 5px;
+          }
+
+          .carousel-nav-button {
+            width: 40px;
+            height: 40px;
+          }
         }
       `}</style>
 
@@ -232,72 +442,43 @@ export default function TestimonialsPage() {
           </p>
         </div>
 
-        {/* Carousel */}
-        <div className="section-animate carousel-container mb-8">
-          <div className="relative">
-            {/* Testimonial Card */}
-            <div className="testimonial-slide testimonial-card bg-light-surface dark:bg-dark-surface rounded-xl p-12 border border-light-border dark:border-dark-border">
-              {/* Stars */}
-              <div className="stars mb-6">
-                {[...Array(5)].map((_, i) => (
-                  <svg
-                    key={i}
-                    className="star w-6 h-6"
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                  >
-                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                  </svg>
-                ))}
-              </div>
-
-              {/* Quote */}
-              <div className="quote-mark">"</div>
-              <p className="text-light-text dark:text-dark-text leading-relaxed text-lg mb-8 -mt-4">
-                {testimonials[currentIndex].quote}
-              </p>
-
-              {/* Author */}
-              <div className="flex items-center gap-4 pt-8 border-t border-light-border dark:border-dark-border">
-                {testimonials[currentIndex].logo && (
-                  <img
-                    src={testimonials[currentIndex].logo}
-                    alt={testimonials[currentIndex].company}
-                    className="w-16 h-16 rounded-lg object-cover"
-                  />
-                )}
-                <div>
-                  <p className="font-semibold text-light-text dark:text-dark-text text-lg">
-                    {testimonials[currentIndex].author}
-                  </p>
-                  <p className="text-sm text-light-muted dark:text-dark-muted">
-                    {testimonials[currentIndex].title}
-                  </p>
-                  <p className="text-sm text-primary dark:text-accent font-medium">
-                    {testimonials[currentIndex].company}
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            {/* Navigation Buttons */}
+        {/* Image Carousel - 3 Images with Side Navigation */}
+        <div className="section-animate mb-16">
+          <div className="carousel-wrapper">
             <button
               onClick={prevSlide}
-              className="carousel-button prev"
-              title="Previous testimonial"
+              className="carousel-nav-button prev"
+              title="Previous"
             >
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-              </svg>
+              ‹
             </button>
+
+            <div className="image-carousel-container">
+              {getVisibleImages().map((testimonial, index) => (
+                <div key={index} className="carousel-image-wrapper">
+                  <div className="carousel-image-card group">
+                    <img 
+                      src={testimonial.logo} 
+                      alt={testimonial.company}
+                    />
+                    <div className="carousel-image-overlay"></div>
+                  </div>
+                  <div className="carousel-description">
+                    {testimonial.author}
+                  </div>
+                  <div className="carousel-quote">
+                    "{testimonial.quote}"
+                  </div>
+                </div>
+              ))}
+            </div>
+
             <button
               onClick={nextSlide}
-              className="carousel-button next"
-              title="Next testimonial"
+              className="carousel-nav-button next"
+              title="Next"
             >
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-              </svg>
+              ›
             </button>
           </div>
 
@@ -308,14 +489,9 @@ export default function TestimonialsPage() {
                 key={index}
                 onClick={() => goToSlide(index)}
                 className={`dot ${index === currentIndex ? 'active' : ''}`}
-                title={`Go to testimonial ${index + 1}`}
+                title={`Go to slide ${index + 1}`}
               />
             ))}
-          </div>
-
-          {/* Slide Counter */}
-          <div className="slide-counter">
-            {currentIndex + 1} / {testimonials.length}
           </div>
         </div>
 
@@ -332,6 +508,13 @@ export default function TestimonialsPage() {
               Get in Touch
             </a>
           </div>
+        </div>
+
+        {/* Scroll Icon */}
+        <div className="scroll-icon">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+          </svg>
         </div>
       </div>
     </div>

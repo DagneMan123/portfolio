@@ -312,6 +312,27 @@ export default function About() {
         .dark .highlight-card:hover .stat-number {
           color: #0ea5e9;
         }
+
+        .journey-dropdown {
+          width: 100%;
+          margin-top: 1rem;
+          padding: 1rem;
+          background: rgba(59, 130, 246, 0.05);
+          border-left: 3px solid rgba(37, 99, 235, 0.3);
+          border-radius: 0.5rem;
+          animation: slideDown 0.15s ease-out;
+        }
+
+        @keyframes slideDown {
+          from {
+            opacity: 0;
+            transform: translateY(-10px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
       `}</style>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
         <div className="section-animate grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mb-20">
@@ -406,6 +427,121 @@ export default function About() {
               <h3 className="text-xl font-bold text-primary dark:text-accent mb-2">Full-Stack Web Development Bootcamp</h3>
               <p className="text-light-muted dark:text-dark-muted mb-2">Tech Academy, 2018</p>
               <p className="text-light-muted dark:text-dark-muted text-sm">Intensive 12-week program covering modern web technologies</p>
+            </div>
+          </div>
+        </div>
+
+        {/* Journey Timeline Section */}
+        <div className="section-animate mt-20">
+          <h2 className="text-4xl font-bold mb-16 text-center gradient-text">Professional Journey</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {/* 2021 */}
+            <div className="stagger-item card-hover p-8 border border-light-border dark:border-dark-border rounded-2xl hover:shadow-lg transition-all">
+              <div className="flex items-center justify-center mb-4">
+                <div className="text-5xl">
+                  📅
+                </div>
+              </div>
+              <div className="flex items-start gap-4">
+                <div className="flex-shrink-0">
+                  <div className="flex items-center justify-center h-12 w-12 rounded-lg bg-primary/10 text-primary font-bold text-lg">
+                    2021
+                  </div>
+                </div>
+                <div className="flex-1">
+                  <h3 className="text-xl font-bold text-primary dark:text-accent mb-2">The Genesis (Foundations)</h3>
+                  <p className="text-light-muted dark:text-dark-muted mb-4 text-sm leading-relaxed">
+                    Started the journey into the digital world. Mastered the core building blocks of the web: HTML5, CSS3, and JavaScript.
+                  </p>
+                  <div className="flex flex-wrap gap-2">
+                    <span className="badge text-xs">HTML5</span>
+                    <span className="badge text-xs">CSS3</span>
+                    <span className="badge text-xs">JavaScript</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* 2022 */}
+            <div className="stagger-item card-hover p-8 border border-light-border dark:border-dark-border rounded-2xl hover:shadow-lg transition-all">
+              <div className="flex items-center justify-center mb-4">
+                <div className="text-5xl">
+                  🚀
+                </div>
+              </div>
+              <div className="flex items-start gap-4">
+                <div className="flex-shrink-0">
+                  <div className="flex items-center justify-center h-12 w-12 rounded-lg bg-primary/10 text-primary font-bold text-lg">
+                    2022
+                  </div>
+                </div>
+                <div className="flex-1">
+                  <h3 className="text-xl font-bold text-primary dark:text-accent mb-2">Exploring Frameworks (Skill Expansion)</h3>
+                  <p className="text-light-muted dark:text-dark-muted mb-4 text-sm leading-relaxed">
+                    Focused on modern styling and efficiency. Adopted Tailwind CSS and started building component-based UIs with React.js.
+                  </p>
+                  <div className="flex flex-wrap gap-2">
+                    <span className="badge text-xs">React.js</span>
+                    <span className="badge text-xs">Tailwind CSS</span>
+                    <span className="badge text-xs">Component Design</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* 2023 */}
+            <div className="stagger-item card-hover p-8 border border-light-border dark:border-dark-border rounded-2xl hover:shadow-lg transition-all">
+              <div className="flex items-center justify-center mb-4">
+                <div className="text-5xl">
+                  ⚡
+                </div>
+              </div>
+              <div className="flex items-start gap-4">
+                <div className="flex-shrink-0">
+                  <div className="flex items-center justify-center h-12 w-12 rounded-lg bg-primary/10 text-primary font-bold text-lg">
+                    2023
+                  </div>
+                </div>
+                <div className="flex-1">
+                  <h3 className="text-xl font-bold text-primary dark:text-accent mb-2">Full-Stack Maturity (Professional Projects)</h3>
+                  <p className="text-light-muted dark:text-dark-muted mb-4 text-sm leading-relaxed">
+                    Bridged the gap between frontend and backend. Specialized in Next.js and started delivering production-ready projects for clients.
+                  </p>
+                  <div className="flex flex-wrap gap-2">
+                    <span className="badge text-xs">Next.js</span>
+                    <span className="badge text-xs">Full-Stack</span>
+                    <span className="badge text-xs">Production Ready</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* 2024 - Present */}
+            <div className="stagger-item card-hover p-8 border border-light-border dark:border-dark-border rounded-2xl bg-gradient-to-r from-primary/5 to-accent/5 hover:shadow-lg transition-all">
+              <div className="flex items-center justify-center mb-4">
+                <div className="text-5xl">
+                  ✨
+                </div>
+              </div>
+              <div className="flex items-start gap-4">
+                <div className="flex-shrink-0">
+                  <div className="flex items-center justify-center h-12 w-12 rounded-lg bg-primary text-white font-bold text-lg">
+                    2024+
+                  </div>
+                </div>
+                <div className="flex-1">
+                  <h3 className="text-xl font-bold text-primary dark:text-accent mb-2">Mastery & Innovation (The "Tbeb" Era)</h3>
+                  <p className="text-light-muted dark:text-dark-muted mb-4 text-sm leading-relaxed">
+                    Pushing the boundaries of web design with advanced animations, TypeScript, and clean architecture. Focused on creating "Digital Experiences," not just websites.
+                  </p>
+                  <div className="flex flex-wrap gap-2">
+                    <span className="badge text-xs">TypeScript</span>
+                    <span className="badge text-xs">Advanced Animations</span>
+                    <span className="badge text-xs">Clean Architecture</span>
+                    <span className="badge text-xs">Digital Experiences</span>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
