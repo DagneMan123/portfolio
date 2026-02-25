@@ -211,6 +211,78 @@ export default function FeaturedProjects() {
           box-shadow: 0 20px 40px rgba(14, 165, 233, 0.15);
         }
 
+        @media (max-width: 1024px) {
+          .project-image {
+            height: 220px;
+          }
+
+          .project-card {
+            padding: 1.25rem;
+          }
+        }
+
+        @media (max-width: 768px) {
+          .project-image {
+            height: 200px;
+          }
+
+          .project-card {
+            padding: 1rem;
+          }
+
+          .project-title {
+            font-size: 1.5rem;
+          }
+
+          .project-description {
+            font-size: 0.9rem;
+          }
+
+          .btn-group {
+            gap: 0.5rem;
+          }
+
+          .btn-group a {
+            font-size: 0.85rem;
+            padding: 0.5rem;
+          }
+        }
+
+        @media (max-width: 480px) {
+          .project-image {
+            height: 180px;
+          }
+
+          .project-card {
+            padding: 0.75rem;
+          }
+
+          .project-title {
+            font-size: 1.25rem;
+            margin-bottom: 0.75rem;
+          }
+
+          .project-description {
+            font-size: 0.85rem;
+            margin-bottom: 0.75rem;
+          }
+
+          .tech-badge {
+            font-size: 0.7rem;
+            padding: 0.25rem 0.5rem;
+          }
+
+          .btn-group {
+            gap: 0.25rem;
+            margin-top: 0.75rem;
+          }
+
+          .btn-group a {
+            font-size: 0.75rem;
+            padding: 0.4rem;
+          }
+        }
+
         .tech-badge {
           animation: scaleIn 0.4s ease-out forwards;
           opacity: 0;

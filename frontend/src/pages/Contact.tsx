@@ -134,6 +134,39 @@ END:VCARD`
           border-color: #2563eb;
         }
 
+        @media (max-width: 768px) {
+          .qr-card {
+            padding: 2rem 1.5rem;
+          }
+
+          .qr-card > div:first-child {
+            order: 2;
+          }
+
+          .qr-card > div:last-child {
+            order: 1;
+            margin-bottom: 2rem;
+          }
+        }
+
+        @media (max-width: 480px) {
+          .qr-card {
+            padding: 1.5rem 1rem;
+          }
+
+          .qr-card h2 {
+            font-size: 1.5rem;
+          }
+
+          .qr-card p {
+            font-size: 0.9rem;
+          }
+
+          .qr-card ul li {
+            font-size: 0.85rem;
+          }
+        }
+
         .input-field {
           width: 100%;
           padding: 0.75rem 1rem;

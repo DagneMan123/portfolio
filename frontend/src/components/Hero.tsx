@@ -168,10 +168,16 @@ export default function Hero() {
 
         .rotating-text {
           display: inline-block;
-          min-width: 320px;
+          min-width: 280px;
           height: 1.2em;
           overflow: hidden;
           position: relative;
+        }
+
+        @media (max-width: 640px) {
+          .rotating-text {
+            min-width: 200px;
+          }
         }
 
         .rotating-text span {
@@ -464,7 +470,7 @@ export default function Hero() {
                   <img src="/src/assets/mom.jpg" alt="Portfolio 2" />
                 </div>
                 <div className="cubic-face bg-gradient-to-br from-primary/10 to-accent/10">
-                  <img src="/src/assets/enate.jpg" alt="Portfolio 3" />
+                  <img src="/src/assets/jj.jpg" alt="Portfolio 3" />
                 </div>
                 <div className="cubic-face bg-gradient-to-br from-primary/10 to-accent/10">
                   <img src="/src/assets/hena.jpg" alt="Portfolio 4" />

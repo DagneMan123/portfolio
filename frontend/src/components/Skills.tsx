@@ -122,6 +122,36 @@ export default function Skills() {
         .skill-card:hover {
           animation: float 3s ease-in-out infinite;
         }
+
+        @media (max-width: 1024px) {
+          .skill-card {
+            padding: 1.5rem;
+          }
+        }
+
+        @media (max-width: 768px) {
+          .skill-card {
+            padding: 1.25rem;
+          }
+
+          .skill-card h3 {
+            font-size: 1.1rem;
+          }
+        }
+
+        @media (max-width: 480px) {
+          .skill-card {
+            padding: 1rem;
+          }
+
+          .skill-card h3 {
+            font-size: 1rem;
+          }
+
+          .skill-card .mb-8 {
+            margin-bottom: 1rem;
+          }
+        }
       `}</style>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

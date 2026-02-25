@@ -241,7 +241,7 @@ export default function ExperiencePage() {
               <div className="flex items-start gap-4">
                 <div className="flex-shrink-0">
                   <div className="flex items-center justify-center h-12 w-12 rounded-lg bg-primary/10 text-primary font-bold text-lg">
-                    2021
+                    2023
                   </div>
                 </div>
                 <div className="flex-1">
@@ -268,7 +268,7 @@ export default function ExperiencePage() {
               <div className="flex items-start gap-4">
                 <div className="flex-shrink-0">
                   <div className="flex items-center justify-center h-12 w-12 rounded-lg bg-primary/10 text-primary font-bold text-lg">
-                    2022
+                    2024
                   </div>
                 </div>
                 <div className="flex-1">
@@ -295,16 +295,18 @@ export default function ExperiencePage() {
               <div className="flex items-start gap-4">
                 <div className="flex-shrink-0">
                   <div className="flex items-center justify-center h-12 w-12 rounded-lg bg-primary/10 text-primary font-bold text-lg">
-                    2023
+                    2025
                   </div>
                 </div>
                 <div className="flex-1">
                   <h3 className="text-xl font-bold text-primary dark:text-accent mb-2">Full-Stack Maturity (Professional Projects)</h3>
                   <p className="text-light-muted dark:text-dark-muted mb-4 text-sm leading-relaxed">
-                    Bridged the gap between frontend and backend. Specialized in Next.js and started delivering production-ready projects for clients.
+                    Bridged the gap between frontend and backend. Specialized in react.tsx and started delivering production-ready projects for clients.
                   </p>
                   <div className="flex flex-wrap gap-2">
-                    <span className="badge text-xs">Next.js</span>
+                    <span className="badge text-xs">React.tsx</span>
+                    <span className="badge text-xs">Node.js/Express</span>
+                    <span className="badge text-xs">Postgres</span>
                     <span className="badge text-xs">Full-Stack</span>
                     <span className="badge text-xs">Production Ready</span>
                   </div>
@@ -322,7 +324,7 @@ export default function ExperiencePage() {
               <div className="flex items-start gap-4">
                 <div className="flex-shrink-0">
                   <div className="flex items-center justify-center h-12 w-12 rounded-lg bg-primary text-white font-bold text-lg">
-                    2024+
+                    2025+
                   </div>
                 </div>
                 <div className="flex-1">

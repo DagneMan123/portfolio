@@ -4,7 +4,7 @@ import pool from '../config/database.js'
 const router = Router()
 
 // Get all projects
-router.get('/', async (req, res) => {
+router.get('/', async (_req, res) => {
   try {
     const result = await pool.query('SELECT * FROM projects ORDER BY created_at DESC')
     res.json(result.rows)

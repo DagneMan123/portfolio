@@ -1,4 +1,4 @@
-import { Router } from 'express'
+import { Router, Request, Response } from 'express'
 import { body, validationResult } from 'express-validator'
 import pool from '../config/database.js'
 
@@ -10,7 +10,7 @@ router.post('/', [
   body('email').isEmail().withMessage('Valid email is required'),
   body('subject').trim().notEmpty().withMessage('Subject is required'),
   body('message').trim().notEmpty().withMessage('Message is required'),
-], async (req, res) => {
+], async (req: Request, res: Response) => {
   try {
     const errors = validationResult(req)
     if (!errors.isEmpty()) {
@@ -34,7 +34,7 @@ router.post('/', [
 })
 
 // Get all messages (admin only)
-router.get('/', async (req, res) => {
+router.get('/', async (_req: Request, res: Response) => {
   try {
     const result = await pool.query('SELECT * FROM contact_messages ORDER BY created_at DESC')
     res.json(result.rows)

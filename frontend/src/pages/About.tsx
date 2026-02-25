@@ -190,6 +190,28 @@ export default function About() {
           height: 320px;
         }
 
+        @media (max-width: 1024px) {
+          .about-image-container {
+            width: 280px;
+            height: 280px;
+          }
+        }
+
+        @media (max-width: 768px) {
+          .about-image-container {
+            width: 240px;
+            height: 240px;
+            margin: 0 auto;
+          }
+        }
+
+        @media (max-width: 480px) {
+          .about-image-container {
+            width: 200px;
+            height: 200px;
+          }
+        }
+
         .cubic-carousel {
           position: relative;
           width: 100%;
@@ -351,7 +373,7 @@ export default function About() {
                 <img src="/src/assets/mom.jpg" alt="About 2" />
               </div>
               <div className="cubic-face bg-gradient-to-br from-primary/10 to-accent/10">
-                <img src="/src/assets/enate.jpg" alt="About 3" />
+                <img src="/src/assets/jj.jpg" alt="About 3" />
               </div>
               <div className="cubic-face bg-gradient-to-br from-primary/10 to-accent/10">
                 <img src="/src/assets/hena.jpg" alt="About 4" />

@@ -98,7 +98,7 @@ export default function Projects() {
         author: 'Michael T.',
         title: 'Founder',
         company: 'SocialConnect',
-        logo: '/src/assets/media.jpg'
+        logo: '/assets/media.jpg'
       }
     },
     {
@@ -370,6 +370,26 @@ export default function Projects() {
 
         .dark .stagger-item:hover {
           box-shadow: 0 20px 40px rgba(14, 165, 233, 0.15);
+        }
+
+        @media (max-width: 768px) {
+          .project-image-container {
+            height: 200px;
+          }
+
+          .stagger-item {
+            padding: 1rem;
+          }
+        }
+
+        @media (max-width: 480px) {
+          .project-image-container {
+            height: 180px;
+          }
+
+          .stagger-item {
+            padding: 0.75rem;
+          }
         }
       `}</style>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">

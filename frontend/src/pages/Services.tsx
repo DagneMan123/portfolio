@@ -240,6 +240,7 @@ export default function Services() {
           .services-grid {
             grid-template-columns: repeat(2, 1fr);
             gap: 2rem;
+            max-width: 400px;
           }
         }
 
@@ -247,6 +248,54 @@ export default function Services() {
           .services-grid {
             grid-template-columns: repeat(2, 1fr);
             gap: 1.5rem;
+            max-width: 350px;
+          }
+
+          .service-icon {
+            width: 70px;
+            height: 70px;
+            font-size: 2rem;
+          }
+
+          .service-full-content {
+            width: 90vw;
+            max-width: 350px;
+            padding: 1.5rem;
+            font-size: 0.85rem;
+          }
+        }
+
+        @media (max-width: 480px) {
+          .services-grid {
+            grid-template-columns: 1fr;
+            gap: 1rem;
+            max-width: 100%;
+          }
+
+          .service-icon {
+            width: 65px;
+            height: 65px;
+            font-size: 1.8rem;
+          }
+
+          .service-title {
+            font-size: 1.1rem;
+          }
+
+          .service-description {
+            font-size: 0.85rem;
+          }
+
+          .service-full-content {
+            width: 95vw;
+            max-width: 300px;
+            padding: 1rem;
+            font-size: 0.8rem;
+          }
+
+          .keyword-badge {
+            font-size: 0.7rem;
+            padding: 0.3rem 0.6rem;
           }
         }
 

@@ -1,27 +1,27 @@
 const experiences = [
   {
     id: 1,
-    company: 'Tech Solutions Inc.',
-    position: 'Senior Full-Stack Developer',
-    duration: '2022 - Present',
-    description: 'Led development of scalable web applications, mentored junior developers, and architected microservices infrastructure.',
-    technologies: ['React', 'Node.js', 'PostgreSQL', 'Docker', 'AWS']
+    company: 'StartUp Hub',
+    position: 'Junior Developer',
+    duration: '2023 - 2024',
+    description: 'Started my professional journey building responsive web interfaces, fixing bugs, and contributing to backend API development. Gained foundational experience with modern web technologies and best practices.',
+    technologies: ['JavaScript', 'HTML5', 'CSS3']
   },
   {
     id: 2,
     company: 'Digital Innovations Ltd.',
     position: 'Full-Stack Developer',
-    duration: '2020 - 2022',
-    description: 'Developed and maintained multiple client projects, implemented CI/CD pipelines, and optimized application performance.',
+    duration: '2024 - 2025',
+    description: 'Developed and maintained multiple client projects, implemented CI/CD pipelines, and optimized application performance. Specialized in building scalable solutions with modern frameworks and databases.',
     technologies: ['React', 'Express', 'MongoDB', 'TypeScript', 'AWS']
   },
   {
     id: 3,
-    company: 'StartUp Hub',
-    position: 'Junior Developer',
-    duration: '2019 - 2020',
-    description: 'Built responsive web interfaces, fixed bugs, and contributed to backend API development.',
-    technologies: ['JavaScript', 'React', 'Node.js', 'MySQL']
+    company: 'Tech Solutions Inc.',
+    position: 'Senior Full-Stack Developer',
+    duration: '2026 - Present',
+    description: 'Leading development of scalable web applications, mentoring junior developers, and architecting microservices infrastructure. Focused on creating high-performance digital experiences and clean code practices.',
+    technologies: ['React', 'Next.js', 'Node.js', 'PostgreSQL', 'Docker', 'AWS']
   }
 ]
 
@@ -93,6 +93,39 @@ export default function Experience() {
 
         .dark .exp-card:hover {
           box-shadow: 0 20px 40px rgba(14, 165, 233, 0.15);
+        }
+
+        @media (max-width: 768px) {
+          .exp-card {
+            flex-direction: column;
+            align-items: flex-start;
+          }
+
+          .exp-number {
+            width: 14px;
+            height: 14px;
+            font-size: 0.75rem;
+          }
+
+          .exp-line {
+            left: 7px;
+          }
+        }
+
+        @media (max-width: 480px) {
+          .exp-number {
+            width: 12px;
+            height: 12px;
+            font-size: 0.65rem;
+          }
+
+          .exp-title {
+            font-size: 1.3rem;
+          }
+
+          .exp-card {
+            gap: 1rem;
+          }
         }
 
         .exp-number {

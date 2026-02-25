@@ -429,6 +429,68 @@ export default function TestimonialsPage() {
           .carousel-nav-button {
             width: 40px;
             height: 40px;
+            font-size: 1.5rem;
+          }
+
+          .carousel-image-wrapper {
+            padding: 1.5rem 1rem;
+          }
+
+          .carousel-description {
+            font-size: 0.9rem;
+          }
+
+          .carousel-quote {
+            font-size: 0.8rem;
+          }
+        }
+
+        @media (max-width: 480px) {
+          .image-carousel-container {
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+          }
+
+          .carousel-image-card {
+            width: 100px;
+            height: 100px;
+          }
+
+          .carousel-image-wrapper {
+            padding: 1rem 0.75rem;
+            border-radius: 0.75rem;
+          }
+
+          .carousel-nav-button {
+            width: 35px;
+            height: 35px;
+            font-size: 1.2rem;
+          }
+
+          .carousel-nav-button.prev {
+            left: 0;
+          }
+
+          .carousel-nav-button.next {
+            right: 0;
+          }
+
+          .carousel-description {
+            font-size: 0.85rem;
+            margin-bottom: 0.5rem;
+          }
+
+          .carousel-quote {
+            font-size: 0.75rem;
+          }
+
+          .carousel-dots {
+            gap: 0.5rem;
+          }
+
+          .dot {
+            width: 10px;
+            height: 10px;
           }
         }
       `}</style>

@@ -1,9 +1,7 @@
-import pkg from 'pg'
+import { Pool } from 'pg'
 import dotenv from 'dotenv'
 
 dotenv.config()
-
-const { Pool } = pkg
 
 const pool = new Pool({
   host: process.env.DB_HOST || 'localhost',
@@ -13,7 +11,7 @@ const pool = new Pool({
   password: process.env.DB_PASSWORD || '',
 })
 
-pool.on('error', (err) => {
+pool.on('error', (err: Error) => {
   console.error('Unexpected error on idle client', err)
 })
 
