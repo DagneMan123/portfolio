@@ -4,6 +4,7 @@ import dotenv from 'dotenv'
 import pool from './config/database.js'
 import projectsRouter from './routes/projects.js'
 import contactRouter from './routes/contact.js'
+import testimonialsRouter from './routes/testimonials.js'
 
 dotenv.config()
 
@@ -15,6 +16,24 @@ async function initializeDatabase() {
   try {
     console.log('Initializing database...')
     
+    // Create users table
+    await pool.query(`
+      CREATE TABLE IF NOT EXISTS users (
+        id SERIAL PRIMARY KEY,
+        username VARCHAR(255) UNIQUE NOT NULL,
+        email VARCHAR(255) UNIQUE NOT NULL,
+        password VARCHAR(255) NOT NULL,
+        full_name VARCHAR(255),
+        phone VARCHAR(20),
+        location VARCHAR(255),
+        bio TEXT,
+        profile_image_url TEXT,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      )
+    `)
+    console.log('✓ Users table ready')
+
     // Create projects table
     await pool.query(`
       CREATE TABLE IF NOT EXISTS projects (
@@ -44,22 +63,21 @@ async function initializeDatabase() {
     `)
     console.log('✓ Contact messages table ready')
 
-    // Insert sample data if projects table is empty
-    const result = await pool.query('SELECT COUNT(*) FROM projects')
-    const count = parseInt(result.rows[0].count)
-    
-    if (count === 0) {
-      console.log('Adding sample projects...')
-      await pool.query(`
-        INSERT INTO projects (title, description, technologies, link, github, featured) VALUES
-        ('E-Commerce Platform', 'Full-stack e-commerce solution with real-time inventory management, payment processing, and admin dashboard.', 'React, Node.js, PostgreSQL, Stripe, Tailwind CSS', 'https://ecommerce-demo.com', 'https://github.com/username/ecommerce', true),
-        ('Task Management App', 'Collaborative task management tool with real-time updates, team collaboration features, advanced filtering, and progress tracking.', 'React, Firebase, TypeScript, Tailwind CSS', 'https://taskapp-demo.com', 'https://github.com/username/taskapp', true),
-        ('Analytics Dashboard', 'Real-time analytics dashboard with interactive data visualization, custom reports generation, and performance metrics tracking.', 'Next.js, Chart.js, PostgreSQL, Express', 'https://analytics-demo.com', 'https://github.com/username/analytics', true)
-      `)
-      console.log('✓ Sample projects added')
-    } else {
-      console.log(`✓ Database has ${count} projects`)
-    }
+    // Create testimonials table
+    await pool.query(`
+      CREATE TABLE IF NOT EXISTS testimonials (
+        id SERIAL PRIMARY KEY,
+        author_name VARCHAR(255) NOT NULL,
+        author_title VARCHAR(255) NOT NULL,
+        quote TEXT NOT NULL,
+        image_url TEXT,
+        is_approved BOOLEAN DEFAULT true,
+        edit_token VARCHAR(255) UNIQUE,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      )
+    `)
+    console.log('✓ Testimonials table ready')
 
     console.log('✓ Database initialized successfully\n')
   } catch (error) {
@@ -77,21 +95,22 @@ app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 
 // Routes
-app.use('/projects', projectsRouter)
-app.use('/contact', contactRouter)
+app.use('/api/projects', projectsRouter)
+app.use('/api/contact', contactRouter)
+app.use('/api/testimonials', testimonialsRouter)
 
 // Health check
-app.get('/health', (req, res) => {
+app.get('/health', (_req, res) => {
   res.json({ status: 'OK' })
 })
 
 // 404 handler
-app.use((req, res) => {
+app.use((_req, res) => {
   res.status(404).json({ error: 'Not found' })
 })
 
 // Error handler
-app.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
+app.use((err: any, _req: express.Request, res: express.Response, _next: express.NextFunction) => {
   console.error('Error:', err)
   res.status(500).json({ error: 'Internal server error' })
 })
@@ -110,3 +129,4 @@ async function startServer() {
 }
 
 startServer()
+

@@ -1,10 +1,10 @@
-import { Router } from 'express'
+import { Router, Request, Response } from 'express'
 import pool from '../config/database.js'
 
 const router = Router()
 
 // Get all projects
-router.get('/', async (_req, res) => {
+router.get('/', async (_req: Request, res: Response) => {
   try {
     const result = await pool.query('SELECT * FROM projects ORDER BY created_at DESC')
     res.json(result.rows)
@@ -15,7 +15,7 @@ router.get('/', async (_req, res) => {
 })
 
 // Get single project
-router.get('/:id', async (req, res) => {
+router.get('/:id', async (req: Request, res: Response) => {
   try {
     const { id } = req.params
     const result = await pool.query('SELECT * FROM projects WHERE id = $1', [id])
@@ -32,7 +32,7 @@ router.get('/:id', async (req, res) => {
 })
 
 // Create project (admin only in production)
-router.post('/', async (req, res) => {
+router.post('/', async (req: Request, res: Response) => {
   try {
     const { title, description, technologies, link, github } = req.body
 
@@ -53,7 +53,7 @@ router.post('/', async (req, res) => {
 })
 
 // Update project
-router.put('/:id', async (req, res) => {
+router.put('/:id', async (req: Request, res: Response) => {
   try {
     const { id } = req.params
     const { title, description, technologies, link, github } = req.body
@@ -75,7 +75,7 @@ router.put('/:id', async (req, res) => {
 })
 
 // Delete project
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', async (req: Request, res: Response) => {
   try {
     const { id } = req.params
     const result = await pool.query('DELETE FROM projects WHERE id = $1 RETURNING *', [id])

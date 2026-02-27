@@ -1,111 +1,130 @@
-# Quick Start - Run Both Servers
+# Quick Start - Running Both Servers
 
-## Windows (CMD)
+## Prerequisites
+- Node.js installed
+- PostgreSQL running locally
+- Backend and frontend dependencies installed
 
-### Method 1: Two Separate Terminals (Recommended)
+## Step 1: Start Backend Server
 
-**Terminal 1 - Backend:**
 ```bash
 cd backend
 npm run dev
 ```
 
-**Terminal 2 - Frontend:**
+Expected output:
+```
+Server running on http://localhost:5000
+✓ Database initialized successfully
+```
+
+**Keep this terminal open!**
+
+## Step 2: Start Frontend Server (New Terminal)
+
 ```bash
 cd frontend
 npm run dev
 ```
 
-Then open: `http://localhost:5173`
-
----
-
-### Method 2: One Command (Requires npm-run-all)
-
-First install:
-```bash
-npm install -g npm-run-all
+Expected output:
 ```
-
-Then run from root:
-```bash
-npm-run-all --parallel "cd backend && npm run dev" "cd frontend && npm run dev"
-```
-
----
-
-## Windows (PowerShell)
-
-### Terminal 1 - Backend:
-```powershell
-cd backend; npm run dev
-```
-
-### Terminal 2 - Frontend:
-```powershell
-cd frontend; npm run dev
-```
-
----
-
-## Expected Output
-
-### Backend Terminal
-```
-Server running on http://localhost:5000
-```
-
-### Frontend Terminal
-```
-VITE v5.4.21  ready in 19350 ms
+VITE v5.4.21  ready in XXX ms
 ➜  Local:   http://localhost:5173/
 ```
 
----
+## Step 3: Access Your Portfolio
 
-## Verify Connection
+Open browser and go to: **http://localhost:5173**
 
-### Test 1: Backend Health
-```bash
-curl http://localhost:5000/health
-```
-Should return: `{"status":"OK"}`
+## Testing the Testimonial System
 
-### Test 2: Frontend
-Open browser: `http://localhost:5173`
-Should load without errors
-
-### Test 3: API Connection
-1. Go to Projects page
-2. Should load projects from backend
-3. No red errors in console
-
----
+1. **Submit Testimonial**: Click "Share Your Feedback" on Testimonials page
+2. **View Testimonials**: Approved testimonials appear on Testimonials page
+3. **Admin Dashboard**: Go to `/admin/testimonials` to approve/manage
+4. **Edit Testimonial**: Use the magic link from submission email
 
 ## Troubleshooting
 
-### "ECONNREFUSED" Error
-- Backend is not running
-- Start backend first: `cd backend && npm run dev`
+### Backend Connection Error
+If you see: `http proxy error: /api/testimonials/public`
+- Make sure backend is running on port 5000
+- Check that database is connected
+- Verify `.env` file has correct database credentials
 
-### "Port already in use"
-- Change PORT in `backend/.env`
-- Or kill the process using the port
+### Database Connection Error
+If backend won't start:
+- Ensure PostgreSQL is running
+- Check `.env` database credentials
+- Run migration: `npm run db:migrate`
 
-### "Cannot find module"
+### Port Already in Use
+If port 5000 or 5173 is in use:
+- Change port in `.env` (backend) or `vite.config.ts` (frontend)
+- Or kill the process using that port
+
+## Environment Variables
+
+### Backend (.env)
+```env
+PORT=5000
+DB_HOST=localhost
+DB_PORT=5432
+DB_NAME=portfolio_db
+DB_USER=postgres
+DB_PASSWORD=your_password
+CORS_ORIGIN=http://localhost:5173
+CLOUDINARY_CLOUD_NAME=your_cloud_name
+CLOUDINARY_API_KEY=your_api_key
+CLOUDINARY_API_SECRET=your_api_secret
+```
+
+### Frontend (.env.local)
+```env
+VITE_CLOUDINARY_CLOUD_NAME=your_cloud_name
+VITE_CLOUDINARY_UPLOAD_PRESET=your_upload_preset
+```
+
+## Common Commands
+
+### Backend
 ```bash
 cd backend
-npm install
-npm run dev
+npm run dev          # Start development server
+npm run build        # Build for production
+npm run db:migrate   # Run database migrations
 ```
+
+### Frontend
+```bash
+cd frontend
+npm run dev          # Start development server
+npm run build        # Build for production
+npm run preview      # Preview production build
+```
+
+## API Endpoints (for testing)
+
+### Public
+- GET `/api/testimonials/public` - Get approved testimonials
+
+### User
+- POST `/api/testimonials` - Submit testimonial
+- GET `/api/testimonials/edit/:token` - Get testimonial by token
+- PUT `/api/testimonials/:id` - Update testimonial
+
+### Admin
+- GET `/api/testimonials/admin/all` - Get all testimonials
+- DELETE `/api/testimonials/:id` - Delete testimonial
+
+## Next Steps
+
+1. ✅ Both servers running
+2. ✅ Database connected
+3. ✅ Testimonial system working
+4. 📝 Set up Cloudinary for image uploads
+5. 🚀 Deploy to production
 
 ---
 
-## Summary
-
-1. **Terminal 1:** `cd backend && npm run dev`
-2. **Terminal 2:** `cd frontend && npm run dev`
-3. **Browser:** Open `http://localhost:5173`
-4. **Done!** ✅
-
-The error will disappear once backend is running.
+**Everything is ready to go! Happy coding!**

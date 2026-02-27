@@ -10,6 +10,9 @@ import Experience from './pages/Experience'
 import Services from './pages/Services'
 import Contact from './pages/Contact'
 import CaseStudyDetail from './pages/CaseStudyDetail'
+import SubmitTestimonial from './pages/SubmitTestimonial'
+import EditTestimonial from './pages/EditTestimonial'
+import AdminTestimonials from './pages/AdminTestimonials'
 
 function App() {
   const location = useLocation()
@@ -61,6 +64,9 @@ function App() {
           <Route path="/about" element={<About />} />
           <Route path="/projects" element={<Projects />} />
           <Route path="/testimonials" element={<Testimonials />} />
+          <Route path="/submit-testimonial" element={<SubmitTestimonial />} />
+          <Route path="/edit/:token" element={<EditTestimonial />} />
+          <Route path="/admin/testimonials" element={<AdminTestimonials />} />
           <Route path="/case-study/:projectId" element={<CaseStudyDetail />} />
           <Route path="/experience" element={<Experience />} />
           <Route path="/services" element={<Services />} />
