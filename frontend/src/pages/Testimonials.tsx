@@ -13,6 +13,7 @@ export default function TestimonialsPage() {
   const [testimonials, setTestimonials] = useState<Testimonial[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
+  const [clickedImageId, setClickedImageId] = useState<number | null>(null)
 
   useEffect(() => {
     fetchTestimonials()
@@ -43,6 +44,10 @@ export default function TestimonialsPage() {
     }
   }
 
+  const handleImageClick = (id: number) => {
+    setClickedImageId(clickedImageId === id ? null : id)
+  }
+
   return (
     <div className="min-h-screen bg-light-bg dark:bg-dark-bg">
       <style>{`
@@ -54,6 +59,33 @@ export default function TestimonialsPage() {
           to {
             opacity: 1;
             transform: translateY(0);
+          }
+        }
+
+        @keyframes imageZoom {
+          from {
+            transform: scale(1);
+          }
+          to {
+            transform: scale(1.15);
+          }
+        }
+
+        @keyframes imageBrighten {
+          from {
+            filter: brightness(1) contrast(1);
+          }
+          to {
+            filter: brightness(1.2) contrast(1.1);
+          }
+        }
+
+        @keyframes imageGlow {
+          from {
+            box-shadow: 0 4px 15px rgba(37, 99, 235, 0.1);
+          }
+          to {
+            box-shadow: 0 0 30px 10px rgba(37, 99, 235, 0.5);
           }
         }
 
@@ -70,6 +102,38 @@ export default function TestimonialsPage() {
         .testimonial-card:nth-child(1) { animation-delay: 0.1s; }
         .testimonial-card:nth-child(2) { animation-delay: 0.2s; }
         .testimonial-card:nth-child(3) { animation-delay: 0.3s; }
+        .testimonial-card:nth-child(4) { animation-delay: 0.4s; }
+        .testimonial-card:nth-child(5) { animation-delay: 0.5s; }
+        .testimonial-card:nth-child(6) { animation-delay: 0.6s; }
+
+        .testimonial-image {
+          position: relative;
+          overflow: hidden;
+          border-radius: 50%;
+          box-shadow: 0 4px 15px rgba(37, 99, 235, 0.1);
+          cursor: pointer;
+          transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .testimonial-image:hover {
+          animation: imageZoom 0.5s ease-out forwards, imageBrighten 0.5s ease-out forwards, imageGlow 0.5s ease-out forwards;
+        }
+
+        .testimonial-image.clicked {
+          animation: imageZoom 0.5s ease-out forwards, imageBrighten 0.5s ease-out forwards, imageGlow 0.5s ease-out forwards;
+        }
+
+        .testimonial-image img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .testimonial-image:hover img,
+        .testimonial-image.clicked img {
+          filter: brightness(1.2) contrast(1.1) saturate(1.2);
+        }
       `}</style>
 
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
@@ -115,27 +179,31 @@ export default function TestimonialsPage() {
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {testimonials.map((testimonial) => (
-              <div key={testimonial.id} className="testimonial-card card p-6 hover:shadow-lg transition-all">
+              <div key={testimonial.id} className="testimonial-card card p-6 border border-primary/10">
                 <div className="flex items-center gap-4 mb-4">
                   {testimonial.image_url && (
-                    <img
-                      src={testimonial.image_url}
-                      alt={testimonial.author_name}
-                      className="w-16 h-16 rounded-full object-cover"
-                      onError={(e) => {
-                        console.error('❌ Failed to load image:', testimonial.image_url)
-                        e.currentTarget.style.display = 'none'
-                      }}
-                    />
+                    <div 
+                      className={`testimonial-image w-16 h-16 ${clickedImageId === testimonial.id ? 'clicked' : ''}`}
+                      onClick={() => handleImageClick(testimonial.id)}
+                    >
+                      <img
+                        src={testimonial.image_url}
+                        alt={testimonial.author_name}
+                        onError={(e) => {
+                          console.error('❌ Failed to load image:', testimonial.image_url)
+                          e.currentTarget.style.display = 'none'
+                        }}
+                      />
+                    </div>
                   )}
-                  <div>
-                    <h3 className="font-bold text-primary">{testimonial.author_name}</h3>
-                    <p className="text-sm text-light-muted dark:text-dark-muted">
+                  <div className="testimonial-content flex-1">
+                    <h3 className="font-bold text-primary testimonial-author">{testimonial.author_name}</h3>
+                    <p className="text-sm text-light-muted dark:text-dark-muted testimonial-title">
                       {testimonial.author_title}
                     </p>
                   </div>
                 </div>
-                <p className="text-light-text dark:text-dark-text italic">
+                <p className="text-light-text dark:text-dark-text italic testimonial-quote">
                   "{testimonial.quote}"
                 </p>
               </div>
