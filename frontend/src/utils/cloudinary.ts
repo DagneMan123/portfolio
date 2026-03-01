@@ -20,7 +20,7 @@ export async function uploadToCloudinary(file: File): Promise<string> {
     throw new Error('❌ File must be an image (JPG, PNG, GIF, etc.)')
   }
 
-  console.log('📤 Starting Cloudinary upload...')
+  console.log(' Starting Cloudinary upload...')
   console.log('Cloud Name:', cloudName)
   console.log('File:', file.name, `(${(file.size / 1024).toFixed(2)}KB)`)
 
