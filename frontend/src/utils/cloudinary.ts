@@ -4,20 +4,20 @@ export async function uploadToCloudinary(file: File): Promise<string> {
 
   // Validate environment variables
   if (!cloudName || cloudName === 'your_cloud_name') {
-    throw new Error('❌ Cloudinary cloud name not configured. Set VITE_CLOUDINARY_CLOUD_NAME in frontend/.env.local')
+    throw new Error(' Cloudinary cloud name not configured. Set VITE_CLOUDINARY_CLOUD_NAME in frontend/.env.local')
   }
 
   // Validate file
   if (!file) {
-    throw new Error('❌ No file selected')
+    throw new Error(' No file selected')
   }
 
   if (file.size > 10 * 1024 * 1024) {
-    throw new Error('❌ File size exceeds 10MB limit')
+    throw new Error(' File size exceeds 10MB limit')
   }
 
   if (!file.type.startsWith('image/')) {
-    throw new Error('❌ File must be an image (JPG, PNG, GIF, etc.)')
+    throw new Error(' File must be an image (JPG, PNG, GIF, etc.)')
   }
 
   console.log(' Starting Cloudinary upload...')
@@ -32,7 +32,7 @@ export async function uploadToCloudinary(file: File): Promise<string> {
     console.log('Upload Preset:', uploadPreset)
     formData.append('upload_preset', uploadPreset)
   } else {
-    console.log('⚠️ No upload preset configured, using auto upload')
+    console.log(' No upload preset configured, using auto upload')
     // For auto upload without preset, we need to use a different approach
     // This will work with any Cloudinary account
   }
@@ -52,7 +52,7 @@ export async function uploadToCloudinary(file: File): Promise<string> {
       let errorMessage = `Upload failed with status ${response.status}`
       try {
         const errorData = await response.json()
-        console.error('❌ Cloudinary error response:', errorData)
+        console.error(' Cloudinary error response:', errorData)
         
         if (errorData.error?.message) {
           errorMessage = errorData.error.message
@@ -65,10 +65,10 @@ export async function uploadToCloudinary(file: File): Promise<string> {
       
       // If preset not found, provide helpful message
       if (errorMessage.includes('preset') || errorMessage.includes('not found')) {
-        throw new Error(`❌ Upload preset not found. Please create an unsigned upload preset in Cloudinary Settings → Upload`)
+        throw new Error(` Upload preset not found. Please create an unsigned upload preset in Cloudinary Settings → Upload`)
       }
       
-      throw new Error(`❌ ${errorMessage}`)
+      throw new Error(` ${errorMessage}`)
     }
 
     const data = await response.json()
@@ -76,13 +76,13 @@ export async function uploadToCloudinary(file: File): Promise<string> {
     console.log('Image URL:', data.secure_url)
     
     if (!data.secure_url) {
-      throw new Error('❌ No URL returned from Cloudinary. Response: ' + JSON.stringify(data))
+      throw new Error(' No URL returned from Cloudinary. Response: ' + JSON.stringify(data))
     }
 
     return data.secure_url
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : String(error)
-    console.error('❌ Cloudinary upload error:', errorMessage)
+    console.error(' Cloudinary upload error:', errorMessage)
     throw error
   }
 }
