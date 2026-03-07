@@ -114,7 +114,7 @@ router.put('/:id', [
     const { id } = req.params
     const { author_name, author_title, quote, image_url, is_approved } = req.body
 
-    console.log('✏️ Backend: Updating testimonial ID:', id)
+    console.log(' Backend: Updating testimonial ID:', id)
     console.log('  Approved:', is_approved ? '✅ Yes' : '❌ No')
 
     const result = await pool.query(
@@ -130,7 +130,7 @@ router.put('/:id', [
 
     res.json({ message: 'Testimonial updated successfully', testimonial: result.rows[0] })
   } catch (error) {
-    console.error('❌ Backend: Error updating testimonial:', error)
+    console.error(' Backend: Error updating testimonial:', error)
     res.status(500).json({ error: 'Failed to update testimonial' })
   }
 })
