@@ -1,9 +1,11 @@
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import TestimonialForm from '../components/TestimonialForm'
 
 export default function SubmitTestimonial() {
   const navigate = useNavigate()
+  const [searchParams] = useSearchParams()
+  const projectId = searchParams.get('projectId') ? parseInt(searchParams.get('projectId')!) : undefined
   const [editLink, setEditLink] = useState('')
 
   const handleSuccess = (link: string) => {
@@ -65,7 +67,7 @@ export default function SubmitTestimonial() {
           </div>
         ) : (
           <div className="section-animate">
-            <TestimonialForm onSuccess={handleSuccess} />
+            <TestimonialForm onSuccess={handleSuccess} projectId={projectId} />
           </div>
         )}
       </div>

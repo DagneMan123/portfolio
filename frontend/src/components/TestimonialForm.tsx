@@ -9,17 +9,22 @@ interface TestimonialFormProps {
     author_title: string
     quote: string
     image_url?: string
+    project_id?: number
+    description?: string
   }
   isEditing?: boolean
   onUpdate?: () => void
+  projectId?: number
 }
 
-export default function TestimonialForm({ onSuccess, initialData, isEditing, onUpdate }: TestimonialFormProps) {
+export default function TestimonialForm({ onSuccess, initialData, isEditing, onUpdate, projectId }: TestimonialFormProps) {
   const [formData, setFormData] = useState({
     author_name: initialData?.author_name || '',
     author_title: initialData?.author_title || '',
     quote: initialData?.quote || '',
     image_url: initialData?.image_url || '',
+    project_id: projectId || initialData?.project_id || 0,
+    description: initialData?.description || '',
   })
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
@@ -56,6 +61,13 @@ export default function TestimonialForm({ onSuccess, initialData, isEditing, onU
     setError('')
     setSuccess(false)
 
+    // If project is selected, description is required
+    if (formData.project_id > 0 && !formData.description.trim()) {
+      setError('Please provide a project description')
+      setLoading(false)
+      return
+    }
+
     try {
       const endpoint = isEditing ? `/api/testimonials/${initialData?.id}` : '/api/testimonials'
       const method = isEditing ? 'PUT' : 'POST'
@@ -88,6 +100,8 @@ export default function TestimonialForm({ onSuccess, initialData, isEditing, onU
           author_title: '',
           quote: '',
           image_url: '',
+          project_id: projectId || 0,
+          description: '',
         })
       }
 
@@ -133,6 +147,57 @@ export default function TestimonialForm({ onSuccess, initialData, isEditing, onU
           />
         </div>
       </div>
+
+      <div>
+        <label className="block text-sm font-bold uppercase tracking-widest mb-3 text-light-muted">
+          Project {projectId ? '(Auto-selected)' : '(Optional)'}
+        </label>
+        <select
+          name="project_id"
+          value={formData.project_id}
+          onChange={(e) => setFormData(prev => ({ ...prev, project_id: parseInt(e.target.value) || 0 }))}
+          disabled={projectId ? true : false}
+          className="w-full px-4 py-2 bg-light-surface dark:bg-dark-surface border border-light-border dark:border-dark-border rounded-lg focus:border-primary focus:outline-none disabled:opacity-60"
+        >
+          {!projectId && <option value={0}>Select a project (optional)</option>}
+          <option value={1}>E-Commerce Platform</option>
+          <option value={2}>Task Management App</option>
+          <option value={3}>Analytics Dashboard</option>
+          <option value={4}>Social Media App</option>
+          <option value={5}>Weather Application</option>
+          <option value={6}>Blog Platform</option>
+        </select>
+        {formData.project_id > 0 && (
+          <p className="text-xs text-primary mt-2">
+            ✓ This testimonial will appear on the selected project's case study page
+          </p>
+        )}
+      </div>
+
+      {formData.project_id > 0 && (
+        <div>
+          <label className="block text-sm font-bold uppercase tracking-widest mb-3 text-light-muted">
+            Project Description <span className="text-red-500">*</span>
+          </label>
+          <textarea
+            name="description"
+            value={formData.description}
+            onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
+            required={formData.project_id > 0}
+            className="w-full h-24 px-4 py-2 bg-light-surface dark:bg-dark-surface border border-light-border dark:border-dark-border rounded-lg focus:border-primary focus:outline-none resize-none"
+            placeholder="Describe what you worked on in this project..."
+            style={{
+              overflowY: 'auto',
+              overflowX: 'hidden',
+              scrollBehavior: 'smooth',
+              WebkitOverflowScrolling: 'touch'
+            }}
+          />
+          <p className="text-xs text-light-muted dark:text-dark-muted mt-2">
+            {formData.description.length} characters
+          </p>
+        </div>
+      )}
 
       <div>
         <label className="block text-sm font-bold uppercase tracking-widest mb-3 text-light-muted">

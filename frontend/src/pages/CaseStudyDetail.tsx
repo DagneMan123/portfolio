@@ -1,12 +1,48 @@
 import { useParams, useNavigate } from 'react-router-dom'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Project } from '../types/index'
+
+interface Testimonial {
+  id: number
+  author_name: string
+  author_title: string
+  quote: string
+  image_url?: string
+  edit_token?: string
+  project_id?: number
+  description?: string
+}
 
 export default function CaseStudyDetail() {
   const { projectId } = useParams()
   const navigate = useNavigate()
   const [rotateX, setRotateX] = useState(0)
   const [rotateY, setRotateY] = useState(0)
+  const [testimonials, setTestimonials] = useState<Testimonial[]>([])
+  const [loadingTestimonials, setLoadingTestimonials] = useState(true)
+
+  // Fetch testimonials from database filtered by project
+  useEffect(() => {
+    const fetchTestimonials = async () => {
+      try {
+        const response = await fetch(`http://localhost:5000/api/testimonials/public?projectId=${projectId}`)
+        if (response.ok) {
+          const data = await response.json()
+          setTestimonials(data)
+        } else {
+          console.error('Failed to load testimonials (Status: ' + response.status + ')')
+        }
+      } catch (error) {
+        console.error('Error fetching testimonials:', error)
+      } finally {
+        setLoadingTestimonials(false)
+      }
+    }
+
+    if (projectId) {
+      fetchTestimonials()
+    }
+  }, [projectId])
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     const rect = e.currentTarget.getBoundingClientRect()
@@ -44,13 +80,7 @@ export default function CaseStudyDetail() {
         solution: 'I redesigned the entire platform using React for the frontend and Node.js for the backend. Implemented Stripe for secure payment processing, optimized images and lazy loading for performance, and created a responsive design that works seamlessly on all devices. Added real-time inventory management and a comprehensive admin dashboard for easy product management.',
         result: 'The new platform loads in under 2 seconds (previously 8+ seconds), mobile traffic increased by 65%, and checkout abandonment dropped to 12%. Revenue increased by 40% within the first quarter.'
       },
-      testimonial: {
-        quote: 'The new platform exceeded our expectations. Not only is it faster and more user-friendly, but the sales increase has been remarkable. Highly recommend!',
-        author: 'Abebe K.',
-        title: 'CEO',
-        company: 'TechEthio',
-        logo: '/src/assets/ecommerce.jpg'
-      }
+
     },
     {
       id: 2,
@@ -66,13 +96,7 @@ export default function CaseStudyDetail() {
         solution: 'Built a unified task management application with real-time collaboration features. Implemented TypeScript for type safety, PostgreSQL for reliable data storage, and integrated real-time updates using WebSockets. Added advanced filtering, team collaboration features, and progress tracking dashboards.',
         result: 'Team productivity increased by 35%, project delivery time reduced by 25%, and team satisfaction scores improved significantly. The app now manages over 5,000 tasks monthly.'
       },
-      testimonial: {
-        quote: 'This app transformed how our team works together. We\'re more organized, more productive, and actually enjoy using it. Worth every penny!',
-        author: 'Sarah M.',
-        title: 'Project Manager',
-        company: 'StartupHub',
-        logo: '/src/assets/app.jpg'
-      }
+
     },
     {
       id: 3,
@@ -88,13 +112,7 @@ export default function CaseStudyDetail() {
         solution: 'Developed a modern analytics dashboard using Next.js for performance and Chart.js for beautiful visualizations. Built custom report generation features, implemented real-time data updates, and created an intuitive interface for non-technical users to explore data.',
         result: 'Dashboard loads 10x faster than the previous solution, users can now generate custom reports in seconds instead of hours, and data-driven decision making improved by 50%.'
       },
-      testimonial: {
-        quote: 'The dashboard gives us the insights we need in real-time. It\'s beautiful, fast, and incredibly useful for our business decisions.',
-        author: 'John D.',
-        title: 'Data Director',
-        company: 'Analytics Pro',
-        logo: '/src/assets/dashboard.jpg'
-      }
+
     },
     {
       id: 4,
@@ -110,13 +128,7 @@ export default function CaseStudyDetail() {
         solution: 'Built a full-featured social media platform with React frontend and Node.js backend. Implemented Socket.io for real-time messaging, MongoDB for flexible data storage, and integrated media upload capabilities with cloud storage.',
         result: 'Platform successfully launched with 10,000+ users in the first month, real-time messaging works flawlessly, and the platform scales efficiently.'
       },
-      testimonial: {
-        quote: 'The platform launched on time and has been rock solid. Our users love the real-time messaging feature. Exceptional work!',
-        author: 'Michael T.',
-        title: 'Founder',
-        company: 'SocialConnect',
-        logo: '/src/assets/media.jpg'
-      }
+
     },
     {
       id: 5,
@@ -132,13 +144,7 @@ export default function CaseStudyDetail() {
         solution: 'Created a stunning weather application with real-time data from OpenWeather API, location-based services using geolocation, and smooth animations. Built with React and TypeScript for reliability.',
         result: 'The app became a popular feature on their platform, with 50,000+ daily active users and excellent user ratings.'
       },
-      testimonial: {
-        quote: 'Beautiful design, accurate data, and lightning-fast performance. Our users request this feature more than anything else!',
-        author: 'Lisa R.',
-        title: 'Product Manager',
-        company: 'TravelHub',
-        logo: '/src/assets/weather2.jpg'
-      }
+
     },
     {
       id: 6,
@@ -154,13 +160,7 @@ export default function CaseStudyDetail() {
         solution: 'Built a modern blogging platform with markdown support for easy content creation, implemented SEO optimization features, added a comment system for community engagement, and created user authentication for personalized experiences.',
         result: 'The platform now hosts 500+ blog posts, attracts 100,000+ monthly visitors, and has become a go-to resource in the industry.'
       },
-      testimonial: {
-        quote: 'This platform transformed my blogging workflow. The SEO features are incredible and my traffic has tripled!',
-        author: 'David K.',
-        title: 'Content Creator',
-        company: 'TechBlog Pro',
-        logo: '/src/assets/blog.jpg'
-      }
+
     }
   ]
 
@@ -340,31 +340,79 @@ export default function CaseStudyDetail() {
             </div>
           </div>
 
-          {/* Testimonial */}
-          {project.testimonial && (
-            <div className="bg-gradient-to-br from-primary/10 to-accent/10 dark:from-primary/20 dark:to-accent/20 rounded-xl p-8 border border-primary/20 dark:border-accent/20">
-              <div className="flex items-start gap-4 mb-6">
-                {project.testimonial.logo && (
-                  <img
-                    src={project.testimonial.logo}
-                    alt={project.testimonial.company}
-                    className="w-16 h-16 rounded-lg object-cover"
-                  />
-                )}
+          {/* Testimonials Section */}
+          <div className="space-y-6">
+            <h3 className="text-2xl font-bold text-light-text dark:text-dark-text">Client Testimonials</h3>
+            
+            {loadingTestimonials ? (
+              <div className="text-center py-8">
+                <p className="text-light-muted dark:text-dark-muted">Loading testimonials...</p>
               </div>
-              <p className="text-light-text dark:text-dark-text italic text-lg mb-6">
-                "{project.testimonial.quote}"
-              </p>
-              <div>
-                <p className="font-semibold text-light-text dark:text-dark-text text-lg">
-                  {project.testimonial.author}
-                </p>
-                <p className="text-light-muted dark:text-dark-muted">
-                  {project.testimonial.title} at {project.testimonial.company}
-                </p>
+            ) : testimonials.length > 0 ? (
+              <div className="grid gap-6">
+                {testimonials.map((testimonial) => (
+                  <div key={testimonial.id} className="bg-gradient-to-br from-primary/10 to-accent/10 dark:from-primary/20 dark:to-accent/20 rounded-xl p-8 border border-primary/20 dark:border-accent/20">
+                    <div className="flex items-start gap-4 mb-6">
+                      {testimonial.image_url && (
+                        <img
+                          src={testimonial.image_url}
+                          alt={testimonial.author_name}
+                          className="w-16 h-16 rounded-lg object-cover"
+                        />
+                      )}
+                    </div>
+                    {testimonial.description && (
+                      <p className="text-light-muted dark:text-dark-muted text-sm mb-4 italic">
+                        "{testimonial.description}"
+                      </p>
+                    )}
+                    <p className="text-light-text dark:text-dark-text italic text-lg mb-6">
+                      "{testimonial.quote}"
+                    </p>
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <p className="font-semibold text-light-text dark:text-dark-text text-lg">
+                          {testimonial.author_name}
+                        </p>
+                        <p className="text-light-muted dark:text-dark-muted">
+                          {testimonial.author_title}
+                        </p>
+                      </div>
+                    </div>
+                    {testimonial.edit_token && (
+                      <div className="mt-6 pt-6 border-t border-primary/20 dark:border-accent/20">
+                        <button
+                          onClick={() => navigate(`/edit/${testimonial.edit_token}`)}
+                          className="text-sm text-primary dark:text-accent hover:underline font-semibold inline-flex items-center gap-2"
+                        >
+                          ✏️ Edit Testimonial
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                ))}
               </div>
+            ) : (
+              <div className="bg-gradient-to-br from-primary/10 to-accent/10 dark:from-primary/20 dark:to-accent/20 rounded-xl p-8 border border-primary/20 dark:border-accent/20 text-center">
+                <p className="text-light-muted dark:text-dark-muted mb-4">No testimonials yet for this project. Be the first to share your experience!</p>
+                <button
+                  onClick={() => navigate(`/submit-testimonial?projectId=${projectId}`)}
+                  className="text-primary dark:text-accent hover:underline font-semibold inline-flex items-center gap-2"
+                >
+                  ✏️ Share Your Testimonial
+                </button>
+              </div>
+            )}
+
+            <div className="mt-8 pt-8 border-t border-primary/20 dark:border-accent/20">
+              <button
+                onClick={() => navigate(`/submit-testimonial?projectId=${projectId}`)}
+                className="text-primary dark:text-accent hover:underline font-semibold inline-flex items-center gap-2"
+              >
+                ✏️ Share Your Testimonial
+              </button>
             </div>
-          )}
+          </div>
         </div>
 
         {/* Technologies */}

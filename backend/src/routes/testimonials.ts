@@ -5,18 +5,80 @@ import crypto from 'crypto'
 
 const router = Router()
 
+// Check if project_id and description columns exist
+let hasProjectIdColumn = false
+let hasDescriptionColumn = false
+
+async function checkColumns() {
+  try {
+    await pool.query(`
+      SELECT project_id FROM testimonials LIMIT 1
+    `)
+    hasProjectIdColumn = true
+    console.log('✓ project_id column exists')
+  } catch (error) {
+    hasProjectIdColumn = false
+    console.log('⚠ project_id column does not exist yet')
+  }
+
+  try {
+    await pool.query(`
+      SELECT description FROM testimonials LIMIT 1
+    `)
+    hasDescriptionColumn = true
+    console.log('✓ description column exists')
+  } catch (error) {
+    hasDescriptionColumn = false
+    console.log('⚠ description column does not exist yet')
+  }
+}
+
+// Check on startup
+checkColumns()
+
 // Generate unique edit token
 function generateEditToken(): string {
   return crypto.randomBytes(32).toString('hex')
 }
 
 // GET: Fetch approved testimonials (public) - MUST be before /:id route
-router.get('/public', async (_req: Request, res: Response) => {
+router.get('/public', async (req: Request, res: Response) => {
   try {
+    const { projectId } = req.query
     console.log(' Backend: Fetching approved testimonials...')
-    const result = await pool.query(
-      'SELECT id, author_name, author_title, quote, image_url, edit_token, created_at FROM testimonials WHERE is_approved = true ORDER BY created_at DESC'
-    )
+    console.log(' Backend: projectId param:', projectId)
+    
+    let query = 'SELECT id, author_name, author_title, quote, image_url, edit_token, created_at'
+    const params: any[] = []
+    
+    if (hasProjectIdColumn) {
+      query += ', project_id'
+    }
+    
+    if (hasDescriptionColumn) {
+      query += ', description'
+    }
+    
+    query += ' FROM testimonials WHERE is_approved = true'
+    
+    if (projectId && hasProjectIdColumn) {
+      const projectIdNum = parseInt(projectId as string)
+      if (!isNaN(projectIdNum) && projectIdNum > 0) {
+        query += ' AND project_id = $1'
+        params.push(projectIdNum)
+        console.log(' Backend: Filtering by projectId:', projectIdNum)
+        
+        // Also require description for case study testimonials
+        if (hasDescriptionColumn) {
+          query += ' AND description IS NOT NULL AND description != \'\''
+          console.log(' Backend: Also requiring description (must have text)')
+        }
+      }
+    }
+    
+    query += ' ORDER BY created_at DESC'
+    
+    const result = await pool.query(query, params)
     console.log(' Backend: Found', result.rows.length, 'approved testimonials')
     res.json(result.rows)
   } catch (error) {
@@ -72,18 +134,48 @@ router.post('/', [
       return res.status(400).json({ errors: errors.array() })
     }
 
-    const { author_name, author_title, quote, image_url } = req.body
+    const { author_name, author_title, quote, image_url, project_id, description } = req.body
     const edit_token = generateEditToken()
+
+    // Ensure project_id is a number or null
+    const projectIdNum = project_id ? parseInt(project_id) : null
 
     console.log(' Backend: Submitting new testimonial...')
     console.log('  Author:', author_name)
     console.log('  Title:', author_title)
+    console.log('  Project ID:', projectIdNum || 'Not specified')
+    console.log('  Description:', description || 'Not specified')
     console.log('  Image URL:', image_url ? ' Provided' : 'Not provided')
 
-    const result = await pool.query(
-      'INSERT INTO testimonials (author_name, author_title, quote, image_url, edit_token, is_approved) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *',
-      [author_name, author_title, quote, image_url || null, edit_token, true]
-    )
+    let query = 'INSERT INTO testimonials ('
+    let values = 'VALUES ('
+    const params: any[] = []
+    let paramCount = 1
+
+    if (hasProjectIdColumn) {
+      query += 'project_id, '
+      values += '$' + paramCount + ', '
+      params.push(projectIdNum || null)
+      paramCount++
+    }
+
+    query += 'author_name, author_title, quote, image_url'
+    values += '$' + paramCount + ', $' + (paramCount + 1) + ', $' + (paramCount + 2) + ', $' + (paramCount + 3)
+    params.push(author_name, author_title, quote, image_url || null)
+    paramCount += 4
+
+    if (hasDescriptionColumn) {
+      query += ', description'
+      values += ', $' + paramCount
+      params.push(description || null)
+      paramCount++
+    }
+
+    query += ', edit_token, is_approved) '
+    values += ', $' + paramCount + ', $' + (paramCount + 1) + ')'
+    params.push(edit_token, true)
+
+    const result = await pool.query(query + values + ' RETURNING *', params)
 
     console.log('Backend: Testimonial saved with ID:', result.rows[0].id)
     console.log(' Backend: Testimonial auto-approved and will appear immediately')
@@ -112,15 +204,36 @@ router.put('/:id', [
     }
 
     const { id } = req.params
-    const { author_name, author_title, quote, image_url, is_approved } = req.body
+    const { author_name, author_title, quote, image_url, is_approved, project_id, description } = req.body
+
+    // Ensure project_id is a number or null
+    const projectIdNum = project_id ? parseInt(project_id) : null
 
     console.log(' Backend: Updating testimonial ID:', id)
     console.log('  Approved:', is_approved ? ' Yes' : ' No')
+    console.log('  Project ID:', projectIdNum || 'Not specified')
+    console.log('  Description:', description || 'Not specified')
 
-    const result = await pool.query(
-      'UPDATE testimonials SET author_name = $1, author_title = $2, quote = $3, image_url = $4, is_approved = $5, updated_at = CURRENT_TIMESTAMP WHERE id = $6 RETURNING *',
-      [author_name, author_title, quote, image_url || null, is_approved || false, id]
-    )
+    let query = 'UPDATE testimonials SET author_name = $1, author_title = $2, quote = $3, image_url = $4, is_approved = $5'
+    const params: any[] = [author_name, author_title, quote, image_url || null, is_approved || false]
+    let paramCount = 6
+
+    if (hasDescriptionColumn) {
+      query += ', description = $' + paramCount
+      params.push(description || null)
+      paramCount++
+    }
+
+    if (hasProjectIdColumn) {
+      query += ', project_id = $' + paramCount
+      params.push(projectIdNum || null)
+      paramCount++
+    }
+
+    query += ', updated_at = CURRENT_TIMESTAMP WHERE id = $' + paramCount + ' RETURNING *'
+    params.push(id)
+
+    const result = await pool.query(query, params)
 
     if (result.rows.length === 0) {
       return res.status(404).json({ error: 'Testimonial not found' })
