@@ -63,7 +63,10 @@ export default function TestimonialForm({ onSuccess, initialData, isEditing, onU
       const response = await fetch(endpoint, {
         method,
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({
+          ...formData,
+          is_approved: true
+        }),
       })
 
       if (!response.ok) {
@@ -140,10 +143,18 @@ export default function TestimonialForm({ onSuccess, initialData, isEditing, onU
           value={formData.quote}
           onChange={handleChange}
           required
-          rows={5}
-          className="w-full px-4 py-2 bg-light-surface dark:bg-dark-surface border border-light-border dark:border-dark-border rounded-lg focus:border-primary focus:outline-none"
+          className="w-full h-40 px-4 py-10 text-lg bg-light-surface dark:bg-dark-surface border border-light-border dark:border-dark-border rounded-lg focus:border-primary focus:outline-none resize-none"
+          style={{
+            overflowY: 'auto',
+            overflowX: 'hidden',
+            scrollBehavior: 'smooth',
+            WebkitOverflowScrolling: 'touch'
+          }}
           placeholder="Share your feedback..."
         />
+        <p className="text-xs text-light-muted dark:text-dark-muted mt-2">
+          {formData.quote.length} characters
+        </p>
       </div>
 
       <div>
@@ -162,7 +173,7 @@ export default function TestimonialForm({ onSuccess, initialData, isEditing, onU
         </div>
         {formData.image_url && (
           <div className="mt-4">
-            <p className="text-sm text-green-500 mb-2">✅ Image uploaded successfully</p>
+            <p className="text-sm text-green-500 mb-2"> Image uploaded successfully</p>
             <img src={formData.image_url} alt="Preview" className="w-24 h-24 rounded-lg object-cover border-2 border-green-500" />
           </div>
         )}
@@ -170,7 +181,7 @@ export default function TestimonialForm({ onSuccess, initialData, isEditing, onU
 
       {error && (
         <div className="p-4 bg-red-500/10 border border-red-500/50 rounded-lg">
-          <p className="text-red-500 text-sm font-semibold mb-2">❌ Error:</p>
+          <p className="text-red-500 text-sm font-semibold mb-2"> Error:</p>
           <p className="text-red-500 text-sm">{error}</p>
           <details className="mt-3 text-xs text-red-400 cursor-pointer">
             <summary className="font-semibold">Troubleshooting Tips</summary>

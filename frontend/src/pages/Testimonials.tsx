@@ -7,6 +7,7 @@ interface Testimonial {
   author_title: string
   quote: string
   image_url?: string
+  edit_token?: string
 }
 
 export default function TestimonialsPage() {
@@ -115,10 +116,6 @@ export default function TestimonialsPage() {
           transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
 
-        .testimonial-image:hover {
-          animation: imageZoom 0.5s ease-out forwards, imageBrighten 0.5s ease-out forwards, imageGlow 0.5s ease-out forwards;
-        }
-
         .testimonial-image.clicked {
           animation: imageZoom 0.5s ease-out forwards, imageBrighten 0.5s ease-out forwards, imageGlow 0.5s ease-out forwards;
         }
@@ -130,9 +127,34 @@ export default function TestimonialsPage() {
           transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
 
-        .testimonial-image:hover img,
         .testimonial-image.clicked img {
           filter: brightness(1.2) contrast(1.1) saturate(1.2);
+        }
+
+        .testimonial-quote {
+          height: 120px;
+          overflow-y: auto;
+          overflow-x: hidden;
+          scrollBehavior: smooth;
+          -webkit-overflow-scrolling: touch;
+        }
+
+        .testimonial-quote::-webkit-scrollbar {
+          width: 4px;
+        }
+
+        .testimonial-quote::-webkit-scrollbar-track {
+          background: rgba(37, 99, 235, 0.1);
+          border-radius: 10px;
+        }
+
+        .testimonial-quote::-webkit-scrollbar-thumb {
+          background: rgba(37, 99, 235, 0.3);
+          border-radius: 10px;
+        }
+
+        .testimonial-quote::-webkit-scrollbar-thumb:hover {
+          background: rgba(37, 99, 235, 0.5);
         }
       `}</style>
 
@@ -179,11 +201,11 @@ export default function TestimonialsPage() {
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {testimonials.map((testimonial) => (
-              <div key={testimonial.id} className="testimonial-card card p-6 border border-primary/10">
+              <div key={testimonial.id} className="testimonial-card card p-6 border border-primary/10 flex flex-col h-full">
                 <div className="flex items-center gap-4 mb-4">
                   {testimonial.image_url && (
                     <div 
-                      className={`testimonial-image w-16 h-16 ${clickedImageId === testimonial.id ? 'clicked' : ''}`}
+                      className={`testimonial-image w-16 h-16 flex-shrink-0 ${clickedImageId === testimonial.id ? 'clicked' : ''}`}
                       onClick={() => handleImageClick(testimonial.id)}
                     >
                       <img
@@ -196,16 +218,26 @@ export default function TestimonialsPage() {
                       />
                     </div>
                   )}
-                  <div className="testimonial-content flex-1">
-                    <h3 className="font-bold text-primary testimonial-author">{testimonial.author_name}</h3>
-                    <p className="text-sm text-light-muted dark:text-dark-muted testimonial-title">
+                  <div className="testimonial-content flex-1 min-w-0">
+                    <h3 className="font-bold text-primary testimonial-author truncate">{testimonial.author_name}</h3>
+                    <p className="text-sm text-light-muted dark:text-dark-muted testimonial-title truncate">
                       {testimonial.author_title}
                     </p>
                   </div>
                 </div>
-                <p className="text-light-text dark:text-dark-text italic testimonial-quote">
+                <p className="text-light-text dark:text-dark-text italic testimonial-quote mb-4 flex-grow">
                   "{testimonial.quote}"
                 </p>
+                {testimonial.edit_token && (
+                  <div className="pt-4 border-t border-light-border dark:border-dark-border">
+                    <Link
+                      to={`/edit/${testimonial.edit_token}`}
+                      className="text-sm text-primary dark:text-accent hover:underline font-semibold"
+                    >
+                      ✏️ Edit Testimonial
+                    </Link>
+                  </div>
+                )}
               </div>
             ))}
           </div>

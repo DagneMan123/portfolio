@@ -56,7 +56,7 @@ npm run dev
 
 ### Terminal 2 - Frontend
 ```bash
-cd frontend
+cd frontend x
 npm run dev
 ```
 

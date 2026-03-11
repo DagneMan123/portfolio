@@ -13,14 +13,14 @@ function generateEditToken(): string {
 // GET: Fetch approved testimonials (public) - MUST be before /:id route
 router.get('/public', async (_req: Request, res: Response) => {
   try {
-    console.log('📥 Backend: Fetching approved testimonials...')
+    console.log(' Backend: Fetching approved testimonials...')
     const result = await pool.query(
-      'SELECT id, author_name, author_title, quote, image_url, created_at FROM testimonials WHERE is_approved = true ORDER BY created_at DESC'
+      'SELECT id, author_name, author_title, quote, image_url, edit_token, created_at FROM testimonials WHERE is_approved = true ORDER BY created_at DESC'
     )
-    console.log('✅ Backend: Found', result.rows.length, 'approved testimonials')
+    console.log(' Backend: Found', result.rows.length, 'approved testimonials')
     res.json(result.rows)
   } catch (error) {
-    console.error('❌ Backend: Error fetching testimonials:', error)
+    console.error(' Backend: Error fetching testimonials:', error)
     res.status(500).json({ error: 'Failed to fetch testimonials' })
   }
 })
@@ -28,14 +28,14 @@ router.get('/public', async (_req: Request, res: Response) => {
 // GET: Fetch all testimonials (admin) - MUST be before /:id route
 router.get('/admin/all', async (_req: Request, res: Response) => {
   try {
-    console.log('📥 Backend: Fetching all testimonials (admin)...')
+    console.log(' Backend: Fetching all testimonials (admin)...')
     const result = await pool.query(
       'SELECT * FROM testimonials ORDER BY created_at DESC'
     )
-    console.log('✅ Backend: Found', result.rows.length, 'total testimonials')
+    console.log(' Backend: Found', result.rows.length, 'total testimonials')
     res.json(result.rows)
   } catch (error) {
-    console.error('❌ Backend: Error fetching testimonials:', error)
+    console.error(' Backend: Error fetching testimonials:', error)
     res.status(500).json({ error: 'Failed to fetch testimonials' })
   }
 })
@@ -75,18 +75,18 @@ router.post('/', [
     const { author_name, author_title, quote, image_url } = req.body
     const edit_token = generateEditToken()
 
-    console.log('📝 Backend: Submitting new testimonial...')
+    console.log(' Backend: Submitting new testimonial...')
     console.log('  Author:', author_name)
     console.log('  Title:', author_title)
-    console.log('  Image URL:', image_url ? '✅ Provided' : '❌ Not provided')
+    console.log('  Image URL:', image_url ? ' Provided' : 'Not provided')
 
     const result = await pool.query(
       'INSERT INTO testimonials (author_name, author_title, quote, image_url, edit_token, is_approved) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *',
       [author_name, author_title, quote, image_url || null, edit_token, true]
     )
 
-    console.log('✅ Backend: Testimonial saved with ID:', result.rows[0].id)
-    console.log('✅ Backend: Testimonial auto-approved and will appear immediately')
+    console.log('Backend: Testimonial saved with ID:', result.rows[0].id)
+    console.log(' Backend: Testimonial auto-approved and will appear immediately')
 
     res.status(201).json({
       message: 'Testimonial submitted successfully and approved!',
@@ -94,7 +94,7 @@ router.post('/', [
       testimonial: result.rows[0]
     })
   } catch (error) {
-    console.error('❌ Backend: Error submitting testimonial:', error)
+    console.error(' Backend: Error submitting testimonial:', error)
     res.status(500).json({ error: 'Failed to submit testimonial' })
   }
 })
@@ -115,7 +115,7 @@ router.put('/:id', [
     const { author_name, author_title, quote, image_url, is_approved } = req.body
 
     console.log(' Backend: Updating testimonial ID:', id)
-    console.log('  Approved:', is_approved ? '✅ Yes' : '❌ No')
+    console.log('  Approved:', is_approved ? ' Yes' : ' No')
 
     const result = await pool.query(
       'UPDATE testimonials SET author_name = $1, author_title = $2, quote = $3, image_url = $4, is_approved = $5, updated_at = CURRENT_TIMESTAMP WHERE id = $6 RETURNING *',
@@ -126,7 +126,7 @@ router.put('/:id', [
       return res.status(404).json({ error: 'Testimonial not found' })
     }
 
-    console.log('✅ Backend: Testimonial updated successfully')
+    console.log(' Backend: Testimonial updated successfully')
 
     res.json({ message: 'Testimonial updated successfully', testimonial: result.rows[0] })
   } catch (error) {
