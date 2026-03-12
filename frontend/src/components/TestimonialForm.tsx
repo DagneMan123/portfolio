@@ -26,14 +26,17 @@ export default function TestimonialForm({ onSuccess, initialData, isEditing, onU
     project_id: projectId || initialData?.project_id || 0,
     description: initialData?.description || '',
   })
+  
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
-  const [success, setSuccess] = useState(false)
   const [uploadingImage, setUploadingImage] = useState(false)
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target
-    setFormData(prev => ({ ...prev, [name]: value }))
+    setFormData(prev => ({ 
+      ...prev, 
+      [name]: name === 'project_id' ? parseInt(value) : value 
+    }))
   }
 
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -47,9 +50,8 @@ export default function TestimonialForm({ onSuccess, initialData, isEditing, onU
       const imageUrl = await uploadToCloudinary(file)
       setFormData(prev => ({ ...prev, image_url: imageUrl }))
     } catch (err: any) {
-      const errorMessage = err?.message || 'Failed to upload image. Please try again.'
-      setError(errorMessage)
-      console.error('Image upload error:', err)
+      setError('Failed to upload image. Please try again.')
+      console.error('Upload error:', err)
     } finally {
       setUploadingImage(false)
     }
@@ -59,17 +61,14 @@ export default function TestimonialForm({ onSuccess, initialData, isEditing, onU
     e.preventDefault()
     setLoading(true)
     setError('')
-    setSuccess(false)
-
-    // If project is selected, description is required
-    if (formData.project_id > 0 && !formData.description.trim()) {
-      setError('Please provide a project description')
-      setLoading(false)
-      return
-    }
 
     try {
-      const endpoint = isEditing ? `/api/testimonials/${initialData?.id}` : '/api/testimonials'
+      // Use absolute path to ensure it hits your local server correctly
+      const baseUrl = 'http://localhost:5000'
+      const endpoint = isEditing 
+        ? `${baseUrl}/api/testimonials/${initialData?.id}` 
+        : `${baseUrl}/api/testimonials`
+      
       const method = isEditing ? 'PUT' : 'POST'
 
       const response = await fetch(endpoint, {
@@ -82,32 +81,23 @@ export default function TestimonialForm({ onSuccess, initialData, isEditing, onU
       })
 
       if (!response.ok) {
-        throw new Error('Failed to submit testimonial')
+        const errorData = await response.json()
+        throw new Error(errorData.error || 'Failed to submit testimonial')
       }
 
       const data = await response.json()
-      setSuccess(true)
 
+      // CRITICAL: Call parent functions
       if (isEditing && onUpdate) {
         onUpdate()
-      } else if (onSuccess && data.edit_link) {
-        onSuccess(data.edit_link)
+      } else if (onSuccess) {
+        // Ensure we pass the edit link to the parent to trigger the Success screen
+        const link = data.edit_link || `/edit/${data.testimonial?.edit_token}`
+        onSuccess(link)
       }
 
-      if (!isEditing) {
-        setFormData({
-          author_name: '',
-          author_title: '',
-          quote: '',
-          image_url: '',
-          project_id: projectId || 0,
-          description: '',
-        })
-      }
-
-      setTimeout(() => setSuccess(false), 5000)
-    } catch (err) {
-      setError('Failed to submit testimonial. Please try again.')
+    } catch (err: any) {
+      setError(err.message || 'Connection error. Is the server running?')
       console.error(err)
     } finally {
       setLoading(false)
@@ -115,10 +105,10 @@ export default function TestimonialForm({ onSuccess, initialData, isEditing, onU
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6 card p-8">
+    <form onSubmit={handleSubmit} className="space-y-6">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div>
-          <label className="block text-sm font-bold uppercase tracking-widest mb-3 text-light-muted">
+          <label className="block text-xs font-bold uppercase tracking-widest mb-2 opacity-70">
             Full Name
           </label>
           <input
@@ -127,14 +117,14 @@ export default function TestimonialForm({ onSuccess, initialData, isEditing, onU
             value={formData.author_name}
             onChange={handleChange}
             required
-            className="w-full px-4 py-2 bg-light-surface dark:bg-dark-surface border border-light-border dark:border-dark-border rounded-lg focus:border-primary focus:outline-none"
-            placeholder="Your Name"
+            className="w-full px-4 py-3 bg-light-surface dark:bg-dark-bg border border-primary/10 rounded-xl focus:border-primary focus:outline-none transition-all"
+            placeholder="John Doe"
           />
         </div>
 
         <div>
-          <label className="block text-sm font-bold uppercase tracking-widest mb-3 text-light-muted">
-            Job Title
+          <label className="block text-xs font-bold uppercase tracking-widest mb-2 opacity-70">
+            Job Title / Company
           </label>
           <input
             type="text"
@@ -142,24 +132,24 @@ export default function TestimonialForm({ onSuccess, initialData, isEditing, onU
             value={formData.author_title}
             onChange={handleChange}
             required
-            className="w-full px-4 py-2 bg-light-surface dark:bg-dark-surface border border-light-border dark:border-dark-border rounded-lg focus:border-primary focus:outline-none"
-            placeholder="e.g., CEO, Developer"
+            className="w-full px-4 py-3 bg-light-surface dark:bg-dark-bg border border-primary/10 rounded-xl focus:border-primary focus:outline-none transition-all"
+            placeholder="CEO at TechCorp"
           />
         </div>
       </div>
 
       <div>
-        <label className="block text-sm font-bold uppercase tracking-widest mb-3 text-light-muted">
-          Project {projectId ? '(Auto-selected)' : '(Optional)'}
+        <label className="block text-xs font-bold uppercase tracking-widest mb-2 opacity-70">
+          Target Project {projectId ? '(Locked)' : '(Optional)'}
         </label>
         <select
           name="project_id"
           value={formData.project_id}
-          onChange={(e) => setFormData(prev => ({ ...prev, project_id: parseInt(e.target.value) || 0 }))}
-          disabled={projectId ? true : false}
-          className="w-full px-4 py-2 bg-light-surface dark:bg-dark-surface border border-light-border dark:border-dark-border rounded-lg focus:border-primary focus:outline-none disabled:opacity-60"
+          onChange={handleChange}
+          disabled={!!projectId}
+          className="w-full px-4 py-3 bg-light-surface dark:bg-dark-bg border border-primary/10 rounded-xl focus:border-primary focus:outline-none disabled:opacity-50"
         >
-          {!projectId && <option value={0}>Select a project (optional)</option>}
+          <option value={0}>General Feedback (No Project)</option>
           <option value={1}>E-Commerce Platform</option>
           <option value={2}>Task Management App</option>
           <option value={3}>Analytics Dashboard</option>
@@ -167,112 +157,69 @@ export default function TestimonialForm({ onSuccess, initialData, isEditing, onU
           <option value={5}>Weather Application</option>
           <option value={6}>Blog Platform</option>
         </select>
-        {formData.project_id > 0 && (
-          <p className="text-xs text-primary mt-2">
-            ✓ This testimonial will appear on the selected project's case study page
-          </p>
-        )}
       </div>
 
-      {formData.project_id > 0 && (
-        <div>
-          <label className="block text-sm font-bold uppercase tracking-widest mb-3 text-light-muted">
-            Project Description <span className="text-red-500">*</span>
-          </label>
-          <textarea
-            name="description"
-            value={formData.description}
-            onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
-            required={formData.project_id > 0}
-            className="w-full h-24 px-4 py-2 bg-light-surface dark:bg-dark-surface border border-light-border dark:border-dark-border rounded-lg focus:border-primary focus:outline-none resize-none"
-            placeholder="Describe what you worked on in this project..."
-            style={{
-              overflowY: 'auto',
-              overflowX: 'hidden',
-              scrollBehavior: 'smooth',
-              WebkitOverflowScrolling: 'touch'
-            }}
-          />
-          <p className="text-xs text-light-muted dark:text-dark-muted mt-2">
-            {formData.description.length} characters
-          </p>
-        </div>
-      )}
+      <div>
+        <label className="block text-xs font-bold uppercase tracking-widest mb-2 opacity-70">
+          Short Context / Role
+        </label>
+        <input
+          type="text"
+          name="description"
+          value={formData.description}
+          onChange={handleChange}
+          className="w-full px-4 py-3 bg-light-surface dark:bg-dark-bg border border-primary/10 rounded-xl focus:border-primary focus:outline-none transition-all"
+          placeholder="e.g. Worked together on the frontend migration"
+        />
+      </div>
 
       <div>
-        <label className="block text-sm font-bold uppercase tracking-widest mb-3 text-light-muted">
-          Your Testimonial
+        <label className="block text-xs font-bold uppercase tracking-widest mb-2 opacity-70">
+          Testimonial / Quote
         </label>
         <textarea
           name="quote"
           value={formData.quote}
           onChange={handleChange}
           required
-          className="w-full h-40 px-4 py-10 text-lg bg-light-surface dark:bg-dark-surface border border-light-border dark:border-dark-border rounded-lg focus:border-primary focus:outline-none resize-none"
-          style={{
-            overflowY: 'auto',
-            overflowX: 'hidden',
-            scrollBehavior: 'smooth',
-            WebkitOverflowScrolling: 'touch'
-          }}
-          placeholder="Share your feedback..."
+          className="w-full h-32 px-4 py-4 bg-light-surface dark:bg-dark-bg border border-primary/10 rounded-xl focus:border-primary focus:outline-none resize-none"
+          placeholder="What was your experience working with me?"
         />
-        <p className="text-xs text-light-muted dark:text-dark-muted mt-2">
-          {formData.quote.length} characters
-        </p>
       </div>
 
       <div>
-        <label className="block text-sm font-bold uppercase tracking-widest mb-3 text-light-muted">
+        <label className="block text-xs font-bold uppercase tracking-widest mb-2 opacity-70">
           Profile Photo
         </label>
         <div className="flex items-center gap-4">
-          <input
-            type="file"
-            accept="image/*"
-            onChange={handleImageUpload}
-            disabled={uploadingImage}
-            className="flex-1 px-4 py-2 bg-light-surface dark:bg-dark-surface border border-light-border dark:border-dark-border rounded-lg cursor-pointer"
-          />
-          {uploadingImage && <span className="text-sm text-primary animate-pulse">📤 Uploading...</span>}
-        </div>
-        {formData.image_url && (
-          <div className="mt-4">
-            <p className="text-sm text-green-500 mb-2"> Image uploaded successfully</p>
-            <img src={formData.image_url} alt="Preview" className="w-24 h-24 rounded-lg object-cover border-2 border-green-500" />
+          <div className="relative flex-1">
+            <input
+              type="file"
+              accept="image/*"
+              onChange={handleImageUpload}
+              disabled={uploadingImage}
+              className="w-full px-4 py-2 bg-light-surface dark:bg-dark-bg border border-primary/10 rounded-xl cursor-pointer file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:bg-primary/10 file:text-primary"
+            />
           </div>
-        )}
+          {formData.image_url && (
+            <img src={formData.image_url} alt="Preview" className="w-12 h-12 rounded-full object-cover border-2 border-primary" />
+          )}
+        </div>
+        {uploadingImage && <p className="text-xs text-primary mt-2 animate-pulse">Uploading to Cloudinary...</p>}
       </div>
 
       {error && (
-        <div className="p-4 bg-red-500/10 border border-red-500/50 rounded-lg">
-          <p className="text-red-500 text-sm font-semibold mb-2"> Error:</p>
-          <p className="text-red-500 text-sm">{error}</p>
-          <details className="mt-3 text-xs text-red-400 cursor-pointer">
-            <summary className="font-semibold">Troubleshooting Tips</summary>
-            <ul className="mt-2 space-y-1 list-disc list-inside">
-              <li>Check that Cloudinary credentials are set in frontend/.env.local</li>
-              <li>Verify upload preset exists and is set to "Unsigned" mode</li>
-              <li>Try a smaller image file (under 5MB)</li>
-              <li>Try JPG or PNG format</li>
-              <li>Check browser console (F12) for more details</li>
-            </ul>
-          </details>
-        </div>
-      )}
-
-      {success && (
-        <div className="p-4 bg-green-500/10 border border-green-500/50 rounded-lg text-green-500 text-sm">
-          ✓ {isEditing ? 'Testimonial updated successfully!' : 'Testimonial submitted successfully! Check your email for the edit link.'}
+        <div className="p-4 bg-red-500/10 border border-red-500/20 rounded-xl text-red-500 text-sm">
+          <strong>Error:</strong> {error}
         </div>
       )}
 
       <button
         type="submit"
         disabled={loading || uploadingImage}
-        className="w-full btn-primary py-3 rounded-lg font-bold uppercase tracking-widest disabled:opacity-50"
+        className="w-full btn-primary py-4 rounded-xl font-bold uppercase tracking-widest disabled:opacity-50 shadow-lg shadow-primary/20"
       >
-        {loading ? 'Submitting...' : isEditing ? 'Update Testimonial' : 'Submit Testimonial'}
+        {loading ? 'Processing...' : isEditing ? 'Update Feedback' : 'Submit Feedback'}
       </button>
     </form>
   )
