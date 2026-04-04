@@ -15,9 +15,10 @@ interface TestimonialFormProps {
   isEditing?: boolean
   onUpdate?: () => void
   projectId?: number
+  editToken?: string
 }
 
-export default function TestimonialForm({ onSuccess, initialData, isEditing, onUpdate, projectId }: TestimonialFormProps) {
+export default function TestimonialForm({ onSuccess, initialData, isEditing, onUpdate, projectId, editToken }: TestimonialFormProps) {
   const [formData, setFormData] = useState({
     author_name: initialData?.author_name || '',
     author_title: initialData?.author_title || '',
@@ -65,11 +66,22 @@ export default function TestimonialForm({ onSuccess, initialData, isEditing, onU
     try {
       // Use absolute path to ensure it hits your local server correctly
       const baseUrl = 'http://localhost:5000'
-      const endpoint = isEditing 
-        ? `${baseUrl}/api/testimonials/${initialData?.id}` 
-        : `${baseUrl}/api/testimonials`
-      
-      const method = isEditing ? 'PUT' : 'POST'
+      let endpoint = ''
+      let method = ''
+
+      if (isEditing && editToken) {
+        // Use token-based endpoint for editing
+        endpoint = `${baseUrl}/api/testimonials/edit/${editToken}`
+        method = 'PUT'
+      } else if (isEditing && initialData?.id) {
+        // Fallback to ID-based endpoint
+        endpoint = `${baseUrl}/api/testimonials/${initialData.id}`
+        method = 'PUT'
+      } else {
+        // New testimonial
+        endpoint = `${baseUrl}/api/testimonials`
+        method = 'POST'
+      }
 
       const response = await fetch(endpoint, {
         method,

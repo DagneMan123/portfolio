@@ -36,6 +36,25 @@ function generateEditToken(): string {
 }
 
 /**
+ * GET: Fetch testimonial by edit token
+ */
+router.get('/edit/:token', async (req: Request, res: Response) => {
+  try {
+    const { token } = req.params;
+    const result = await pool.query('SELECT id, author_name, author_title, quote, image_url FROM testimonials WHERE edit_token = $1', [token]);
+    
+    if (result.rows.length === 0) {
+      return res.status(404).json({ error: 'Testimonial not found' });
+    }
+    
+    res.json(result.rows[0]);
+  } catch (error) {
+    console.error('Edit Fetch Error:', error);
+    res.status(500).json({ error: 'Failed to fetch testimonial' });
+  }
+});
+
+/**
  * GET: Fetch approved testimonials
  * Logic: 
  * - If projectId is provided: Returns only testimonials for that project.
@@ -119,6 +138,44 @@ router.post('/', [
   } catch (error) {
     console.error('Submission Error:', error);
     res.status(500).json({ error: 'Failed to submit testimonial' });
+  }
+});
+
+/**
+ * PUT: Update testimonial by token
+ */
+router.put('/edit/:token', async (req: Request, res: Response) => {
+  try {
+    const { token } = req.params;
+    const { author_name, author_title, quote, image_url, project_id, description } = req.body;
+    const projectIdNum = project_id ? parseInt(project_id) : null;
+
+    let query = 'UPDATE testimonials SET author_name = $1, author_title = $2, quote = $3, image_url = $4';
+    const params = [author_name, author_title, quote, image_url || null];
+    let count = 5;
+
+    if (hasDescriptionColumn) {
+      query += `, description = $${count}`;
+      params.push(description || null);
+      count++;
+    }
+
+    if (hasProjectIdColumn) {
+      query += `, project_id = $${count}`;
+      params.push(projectIdNum);
+      count++;
+    }
+
+    query += `, updated_at = CURRENT_TIMESTAMP WHERE edit_token = $${count} RETURNING *`;
+    params.push(token);
+
+    const result = await pool.query(query, params);
+    if (result.rows.length === 0) return res.status(404).json({ error: 'Testimonial not found' });
+
+    res.json(result.rows[0]);
+  } catch (error) {
+    console.error('Update Error:', error);
+    res.status(500).json({ error: 'Update failed' });
   }
 });
 

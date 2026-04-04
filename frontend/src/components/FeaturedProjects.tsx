@@ -17,13 +17,7 @@ const featuredProjects: Project[] = [
       solution: 'I redesigned the entire platform using React for the frontend and Node.js for the backend. Implemented Stripe for secure payment processing, optimized images and lazy loading for performance, and created a responsive design that works seamlessly on all devices. Added real-time inventory management and a comprehensive admin dashboard for easy product management.',
       result: 'The new platform loads in under 2 seconds (previously 8+ seconds), mobile traffic increased by 65%, and checkout abandonment dropped to 12%. Revenue increased by 40% within the first quarter.'
     },
-    testimonial: {
-      quote: 'The new platform exceeded our expectations. Not only is it faster and more user-friendly, but the sales increase has been remarkable. Highly recommend!',
-      author: 'Abebe K.',
-      title: 'CEO',
-      company: 'TechEthio',
-      logo: '/src/assets/ecommerce.jpg'
-    }
+
   },
   {
     id: 2,
@@ -39,13 +33,7 @@ const featuredProjects: Project[] = [
       solution: 'Built a unified task management application with real-time collaboration features. Implemented TypeScript for type safety, PostgreSQL for reliable data storage, and integrated real-time updates using WebSockets. Added advanced filtering, team collaboration features, and progress tracking dashboards.',
       result: 'Team productivity increased by 35%, project delivery time reduced by 25%, and team satisfaction scores improved significantly. The app now manages over 5,000 tasks monthly.'
     },
-    testimonial: {
-      quote: 'This app transformed how our team works together. We\'re more organized, more productive, and actually enjoy using it. Worth every penny!',
-      author: 'Sarah M.',
-      title: 'Project Manager',
-      company: 'StartupHub',
-      logo: '/src/assets/app.jpg'
-    }
+
   },
   {
     id: 3,
@@ -61,13 +49,7 @@ const featuredProjects: Project[] = [
       solution: 'Developed a modern analytics dashboard using Next.js for performance and Chart.js for beautiful visualizations. Built custom report generation features, implemented real-time data updates, and created an intuitive interface for non-technical users to explore data.',
       result: 'Dashboard loads 10x faster than the previous solution, users can now generate custom reports in seconds instead of hours, and data-driven decision making improved by 50%.'
     },
-    testimonial: {
-      quote: 'The dashboard gives us the insights we need in real-time. It\'s beautiful, fast, and incredibly useful for our business decisions.',
-      author: 'John D.',
-      title: 'Data Director',
-      company: 'Analytics Pro',
-      logo: '/src/assets/dashboard.jpg'
-    }
+
   }
 ]
 

@@ -27,13 +27,7 @@ export default function Projects() {
         solution: 'I redesigned the entire platform using React for the frontend and Node.js for the backend. Implemented Stripe for secure payment processing, optimized images and lazy loading for performance, and created a responsive design that works seamlessly on all devices. Added real-time inventory management and a comprehensive admin dashboard for easy product management.',
         result: 'The new platform loads in under 2 seconds (previously 8+ seconds), mobile traffic increased by 65%, and checkout abandonment dropped to 12%. Revenue increased by 40% within the first quarter.'
       },
-      testimonial: {
-        quote: 'The new platform exceeded our expectations. Not only is it faster and more user-friendly, but the sales increase has been remarkable. Highly recommend!',
-        author: 'Abebe K.',
-        title: 'CEO',
-        company: 'TechEthio',
-        logo: '/src/assets/ecommerce.jpg'
-      }
+
     },
     {
       id: 2,
@@ -49,13 +43,7 @@ export default function Projects() {
         solution: 'Built a unified task management application with real-time collaboration features. Implemented TypeScript for type safety, PostgreSQL for reliable data storage, and integrated real-time updates using WebSockets. Added advanced filtering, team collaboration features, and progress tracking dashboards.',
         result: 'Team productivity increased by 35%, project delivery time reduced by 25%, and team satisfaction scores improved significantly. The app now manages over 5,000 tasks monthly.'
       },
-      testimonial: {
-        quote: 'This app transformed how our team works together. We\'re more organized, more productive, and actually enjoy using it. Worth every penny!',
-        author: 'Sarah M.',
-        title: 'Project Manager',
-        company: 'StartupHub',
-        logo: '/src/assets/app.jpg'
-      }
+
     },
     {
       id: 3,
@@ -71,13 +59,7 @@ export default function Projects() {
         solution: 'Developed a modern analytics dashboard using Next.js for performance and Chart.js for beautiful visualizations. Built custom report generation features, implemented real-time data updates, and created an intuitive interface for non-technical users to explore data.',
         result: 'Dashboard loads 10x faster than the previous solution, users can now generate custom reports in seconds instead of hours, and data-driven decision making improved by 50%.'
       },
-      testimonial: {
-        quote: 'The dashboard gives us the insights we need in real-time. It\'s beautiful, fast, and incredibly useful for our business decisions.',
-        author: 'John D.',
-        title: 'Data Director',
-        company: 'Analytics Pro',
-        logo: '/src/assets/dashboard.jpg'
-      }
+
     },
     {
       id: 4,
@@ -93,13 +75,7 @@ export default function Projects() {
         solution: 'Built a full-featured social media platform with React frontend and Node.js backend. Implemented Socket.io for real-time messaging, MongoDB for flexible data storage, and integrated media upload capabilities with cloud storage.',
         result: 'Platform successfully launched with 10,000+ users in the first month, real-time messaging works flawlessly, and the platform scales efficiently.'
       },
-      testimonial: {
-        quote: 'The platform launched on time and has been rock solid. Our users love the real-time messaging feature. Exceptional work!',
-        author: 'Michael T.',
-        title: 'Founder',
-        company: 'SocialConnect',
-        logo: '/assets/media.jpg'
-      }
+
     },
     {
       id: 5,
@@ -115,13 +91,7 @@ export default function Projects() {
         solution: 'Created a stunning weather application with real-time data from OpenWeather API, location-based services using geolocation, and smooth animations. Built with React and TypeScript for reliability.',
         result: 'The app became a popular feature on their platform, with 50,000+ daily active users and excellent user ratings.'
       },
-      testimonial: {
-        quote: 'Beautiful design, accurate data, and lightning-fast performance. Our users request this feature more than anything else!',
-        author: 'Lisa R.',
-        title: 'Product Manager',
-        company: 'TravelHub',
-        logo: '/src/assets/weather2.jpg'
-      }
+
     },
     {
       id: 6,
@@ -137,13 +107,7 @@ export default function Projects() {
         solution: 'Built a modern blogging platform with markdown support for easy content creation, implemented SEO optimization features, added a comment system for community engagement, and created user authentication for personalized experiences.',
         result: 'The platform now hosts 500+ blog posts, attracts 100,000+ monthly visitors, and has become a go-to resource in the industry.'
       },
-      testimonial: {
-        quote: 'This platform transformed my blogging workflow. The SEO features are incredible and my traffic has tripled!',
-        author: 'David K.',
-        title: 'Content Creator',
-        company: 'TechBlog Pro',
-        logo: '/src/assets/blog.jpg'
-      }
+
     }
   ]
 

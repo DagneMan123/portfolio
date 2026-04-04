@@ -102,6 +102,7 @@ export default function EditTestimonial() {
           <TestimonialForm
             initialData={testimonial}
             isEditing={true}
+            editToken={token}
             onUpdate={handleUpdate}
           />
         </div>
